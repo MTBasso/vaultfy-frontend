@@ -1,0 +1,108 @@
+@import '../../../../styles/colors'
+
+.credential-details-container
+  display: flex
+  flex-direction: column
+  gap: 2rem
+  background-color: $slate800
+  width: 100%
+  height: fit-content
+  border-radius: 16px
+  padding: 1.5rem
+
+.credential-header
+  display: flex
+  justify-content: space-between
+  
+.info
+  display: flex
+  gap: 1rem
+  justify-content: center
+  align-items: center
+
+  img
+    width: 70px
+    height: 70px
+  
+.name-and-vault
+  display: flex
+  flex-direction: column
+  
+  h4
+    color: $slate50
+
+  span
+    padding: .5rem
+    border-radius: 12px
+    display: flex
+    background-color: $fuchsia600
+    color: $fuchsia300
+    width: fit-content
+
+.controllers
+  display: flex
+  flex-direction: row
+  gap: .5rem
+
+  .delete
+    background-color: transparent
+    transition: all .2s ease-in-out
+
+    &:hover
+      background-color: $red600
+
+  button
+    background-color: transparent
+    transition: all .2s ease-in-out
+
+    svg
+      cursor: pointer
+      padding: 0
+      padding: .15rem .15rem
+      width: 1.5rem
+      height: 1.5rem
+
+    &:hover
+      background-color: $slate600
+      
+.credential-details
+  display: flex
+  flex-direction: column
+  gap: 3rem
+
+  div
+    display: flex
+    flex-direction: column
+    gap: .5rem
+
+  span 
+    color: $slate200
+    margin: 0
+
+  p
+    color: $slate50
+    margin: 0
+
+  .password
+    display: flex
+    flex-direction: row
+    justify-content: space-between
+
+    .buttons
+      display: flex
+      flex-direction: row
+      gap: .5rem
+
+      button
+        background-color: transparent
+        transition: all .2s ease-in-out
+
+        svg
+          cursor: pointer
+          padding: 0
+          padding: .15rem .15rem
+          width: 1.5rem
+          height: 1.5rem
+
+        &:hover
+          background-color: $slate600
