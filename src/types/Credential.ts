@@ -4,4 +4,5 @@ export interface Credential {
   website: string;
   login: string;
   password: string;
+  vaultId: string;
 }

@@ -23,17 +23,32 @@
 .content-header
   display: flex
   justify-content: space-between
+  align-items: center
   width: 100%
-  
-  > div 
-    margin-left: 25%
 
   button
     width: fit-content
     height: fit-content
     transition: outline .2s ease-in-out
+    padding: 1rem
+    background-color: $blue600
+
+    svg
+      margin-left: .25rem
+      width: 1.35rem
+      height: 1.35rem
+      color: $blue300
 
     &:hover
       outline: 2px solid $slate50
 
+  .add-credential-button
+    width: fit-content
+    height: fit-content
+    transition: outline .2s ease-in-out
+    padding: 1rem
+    font-weight: normal
+    font-size: 1.35rem
 
+    svg
+      color: $slate50

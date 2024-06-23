@@ -1,10 +1,31 @@
 @import './colors'
 @import './media-queries'
 
-body
+:root 
+  --red600: #{$red600}
+  --orange600: #{$orange600}
+  --amber600: #{$amber600}
+  --yellow600: #{$yellow600}
+  --lime600: #{$lime600}
+  --green600: #{$green600}
+  --emerald600: #{$emerald600}
+  --teal600: #{$teal600}
+  --cyan600: #{$cyan600}
+  --sky600: #{$sky600}
+  --blue600: #{$blue600}
+  --indigo600: #{$indigo600}
+  --violet600: #{$violet600}
+  --purple600: #{$purple600}
+  --fuchsia600: #{$fuchsia600}
+  --pink600: #{$pink600}
+  --rose600: #{$rose600}
+
+html, body
+  height: 100%
   box-sizing: border-box
   margin: 0
-  font-family: sans-serif
+  font-family: 'Inter', sans-serif
+  overflow: hidden
 
 h4
   margin: 0
@@ -30,3 +51,4 @@ button
 .app-wrapper
   display: flex
   flex-direction: row
+  height: 100vh

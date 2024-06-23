@@ -1,4 +1,5 @@
 @import '../../../styles/colors'
+@import '../../../styles/default'
 
 .item-container
   display: flex
@@ -18,8 +19,58 @@
 .dot 
   width: 1.25rem
   height: 1.25rem
-  background-color: $fuchsia600 // make 'responsise'
   border-radius: 50%
+  
+  &.red
+    background-color: $red600
+
+  &.orange
+    background-color: $orange600
+
+  &.amber
+    background-color: $amber600
+
+  &.yellow
+    background-color: $yellow600
+
+  &.lime
+    background-color: $lime600
+
+  &.green
+    background-color: $green600
+
+  &.emerald
+    background-color: $emerald600
+
+  &.teal
+    background-color: $teal600
+
+  &.cyan
+    background-color: $cyan600
+
+  &.sky
+    background-color: $sky600
+
+  &.blue
+    background-color: $blue600
+
+  &.indigo
+    background-color: $indigo600
+
+  &.violet
+    background-color: $violet600
+
+  &.purple
+    background-color: $purple600
+
+  &.fuchsia
+    background-color: $fuchsia600
+
+  &.pink
+    background-color: $pink600
+
+  &.rose
+    background-color: $rose600
 
 p
   font-size: 1.5rem
@@ -27,3 +78,26 @@ p
   flex-direction: row
   align-items: center
   gap: 1.25rem
+
+.item-content
+  display: flex
+  width: 100%
+  justify-content: space-between
+  align-items: center
+
+.three-dots
+  button
+    background-color: transparent
+    outline: 1px solid $slate600
+    padding: .5rem
+    transition: all .2s ease-in-out
+
+    &:hover
+      background-color: $slate600
+      outline: 1px solid $slate800
+
+
+    svg
+      padding: 0
+      width: fit-content
+      height: fit-content

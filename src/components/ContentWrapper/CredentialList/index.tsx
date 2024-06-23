@@ -1,18 +1,19 @@
+import { useData } from '../../../hooks/useData';
 import type { Credential } from '../../../types/Credential';
 import { CredentialItem } from '../CredentialItem';
 import './styles.sass';
 
 interface CredentialListProps {
-  credentials: Credential[];
   selectedCredential: Credential | null;
   onSelectCredential(credential: Credential): void;
 }
 
 export function CredentialList({
-  credentials,
   selectedCredential,
   onSelectCredential,
 }: CredentialListProps) {
+  const { credentials } = useData()
+
   return (
     <>
       <div className="credential-list-container">

@@ -1,0 +1,241 @@
+// @import '../../../styles/colors'
+  
+// .modal-overlay 
+//   position: fixed
+//   top: 0
+//   left: 0
+//   right: 0
+//   bottom: 0
+//   background: rgba(0, 0, 0, 0.45)
+//   display: flex
+//   justify-content: center
+//   align-items: center
+
+// .modal-content 
+//   background: $slate900
+//   padding: 2rem
+//   border-radius: 16px
+//   position: relative
+//   display: flex
+//   flex-direction: column
+//   width: 400px
+//   gap: 1rem
+
+//   form 
+//     display: flex
+//     flex-direction: column
+//     gap: 1rem
+
+//     label
+//       display: flex
+//       flex-direction: column
+//       gap: .35rem
+//       color: $slate200
+
+//     input
+//       background-color: $slate800
+//       color: $slate50
+//       border: none
+//       border-radius: 16px
+//       padding: 1rem
+//       transition: outline .2s ease-in-out
+//       font-size: 1.1rem
+
+//       &:hover 
+//         outline: 1px solid $slate200
+//         transition: outline .2s ease-in-out
+
+//       &::placeholder
+//         color: $slate400
+
+//       &:focus
+//         outline: 2px solid $slate50  
+//         transition: outline .2s ease-in-out
+
+// .modal-header
+//   display: flex
+//   width: 100%
+//   justify-content: space-between
+//   align-items: center
+  
+//   .modal-close 
+//     cursor: pointer
+//     color: $slate200
+
+//   h2
+//     margin: 0
+//     color: $slate50
+    
+//   button
+//     align-items: center
+//     justify-content: center
+//     width: fit-content
+//     height: fit-content
+//     padding: 0
+
+//     svg
+//       color: $slate200
+
+// .color-options 
+//     display: flex
+//     flex-direction: column
+//     gap: 1rem
+//     padding: .5rem
+    
+//     .colors
+//       display: flex
+//       flex-wrap: wrap
+//       gap: 1rem
+//       width: 100%
+
+//     .color-label 
+//       display: flex
+//       align-items: center
+
+//       input[type="radio"] 
+//         opacity: 0
+//         position: absolute
+//         // top: 0
+//         // left: 0
+//         width: fit-content
+//         height: fit-content
+//         cursor: pointer
+      
+//       .color-swatch 
+//         display: inline-block
+//         width: 1.5rem
+//         height: 1.5rem
+//         outline: 1px solid $slate200
+//         cursor: pointer
+//         transition: transform 0.2s
+//         border-radius: 6px
+
+//       input[type="radio"]:checked + .color-swatch 
+//         transform: scale(1.1)
+//         outline: 2px solid $slate50
+
+// .error-message 
+//   color: red
+//   margin-top: 10px
+
+
+@import '../../../styles/colors'
+
+.modal-overlay 
+  position: fixed
+  top: 0
+  left: 0
+  right: 0
+  bottom: 0
+  background: rgba(0, 0, 0, 0.45)
+  display: flex
+  justify-content: center
+  align-items: center
+
+.modal-content 
+  background: $slate900
+  padding: 2rem
+  border-radius: 16px
+  position: relative
+  display: flex
+  flex-direction: column
+  width: 400px
+  gap: 1rem
+
+  form 
+    display: flex
+    flex-direction: column
+    gap: 1rem
+
+    label
+      display: flex
+      flex-direction: column
+      gap: .35rem
+      color: $slate200
+
+    input
+      background-color: $slate800
+      color: $slate50
+      border: none
+      border-radius: 16px
+      padding: 1rem
+      transition: outline .2s ease-in-out
+      font-size: 1.1rem
+
+      &:hover 
+        outline: 1px solid $slate200
+        transition: outline .2s ease-in-out
+
+      &::placeholder
+        color: $slate400
+
+      &:focus
+        outline: 2px solid $slate50  
+        transition: outline .2s ease-in-out
+
+.modal-header
+  display: flex
+  width: 100%
+  justify-content: space-between
+  align-items: center
+  
+  .modal-close 
+    cursor: pointer
+    color: $slate200
+
+  h2
+    margin: 0
+    color: $slate50
+    
+  button
+    align-items: center
+    justify-content: center
+    width: fit-content
+    height: fit-content
+    padding: 0
+
+    svg
+      color: $slate200
+
+.color-options 
+  display: flex
+  flex-direction: column
+  gap: 1rem
+  padding: .5rem
+    
+  .colors
+    display: flex
+    flex-wrap: wrap
+    gap: 1rem
+    width: 100%
+
+  .color-label 
+    display: flex
+    align-items: center
+    position: relative
+
+    input[type="radio"] 
+      opacity: 0
+      position: absolute
+      top: 0
+      left: 0
+      width: 100%
+      height: 100%
+      cursor: pointer
+
+    .color-swatch 
+      display: inline-block
+      width: 1.5rem
+      height: 1.5rem
+      outline: 1px solid $slate200
+      cursor: pointer
+      transition: transform 0.2s
+      border-radius: 6px
+
+    input[type="radio"]:checked + .color-swatch 
+      transform: scale(1.1)
+      outline: 2px solid $slate50
+
+.error-message 
+  color: red
+  margin-top: 10px

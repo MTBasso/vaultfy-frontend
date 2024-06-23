@@ -1,6 +1,5 @@
 import type { Credential } from '../../../types/Credential';
 import './styles.sass';
-import { CredentialDetails } from './CredentialDetails';
 
 interface CredentialItemProps {
   credential: Credential;

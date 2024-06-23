@@ -3,8 +3,10 @@
 .wrapper
   display: flex
   flex-direction: column
-  justify-content: space-between
+  // justify-content: space-between
   align-items: flex-start
+  border-right: 1px solid $slate600
+  gap: 3rem
 
   background: rgb(15,23,42)
   background: linear-gradient(0deg, #0f172a 0%, #334155 100%)
@@ -12,12 +14,50 @@
   width: 410px
   height: calc(100vh - 3rem)
   padding: 1.5rem
+  max-height: 100vw
+  overflow-y: none 
 
 .top-half
+  padding-bottom: 1.5rem
+  border-bottom: 1px solid $slate600
   width: 100%
   display: flex
   flex-direction: column
   gap: 3rem
 
-.new-vault-button
-  width: 100%
+.logo-user
+  display: flex
+  align-items: center
+  justify-content: space-between
+
+  button
+    width: fit-content
+    height: fit-content
+    transition: outline .2s ease-in-out
+    padding: 1rem
+    background-color: $blue600
+
+    svg
+      width: 1.35rem
+      height: 1.35rem
+      color: $blue300
+
+    &:hover
+      outline: 2px solid $slate50
+
+  .sign-out-button
+    width: fit-content
+    height: fit-content
+    transition: outline .2s ease-in-out
+    padding: 1rem
+    background-color: $red600
+
+    svg
+      margin-left: 0
+      width: 1.35rem
+      height: 1.35rem
+      color: $red300
+
+    &:hover
+      outline: 2px solid $slate50
+

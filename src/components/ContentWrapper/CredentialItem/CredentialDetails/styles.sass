@@ -1,6 +1,41 @@
 @import '../../../../styles/colors'
 
-.credential-details-container
+@keyframes skeleton-loading-animation 
+  0%
+    background-color: $slate800
+  50%
+    background-color: $slate600
+  100%
+    background-color: $slate800
+
+.credential-details-wrapper.loading
+  width: 100%
+  height: fit-content
+  display: flex
+  justify-content: center
+  align-items: center
+  position: relative
+  border-radius: 16px
+
+.credential-details-wrapper.loading .skeleton-loading
+  position: absolute
+  top: 0
+  left: 0
+  width: 100%
+  height: 100%
+  background-color: $slate800
+  display: flex
+  justify-content: center
+  align-items: center
+  border-radius: 16px
+  animation: skeleton-loading-animation .5s ease-in-out infinite alternate
+
+.skeleton-rect
+  width: 100%
+  height: 100%
+  background-color: $slate700
+
+.loaded-details
   display: flex
   flex-direction: column
   gap: 2rem
@@ -19,10 +54,12 @@
   gap: 1rem
   justify-content: center
   align-items: center
+  margin-bottom: 2rem
 
   img
     width: 70px
     height: 70px
+    outline: 2px solid $slate600
   
 .name-and-vault
   display: flex
@@ -33,11 +70,77 @@
 
   span
     padding: .5rem
-    border-radius: 12px
+    border-radius: 8px
     display: flex
-    background-color: $fuchsia600
-    color: $fuchsia300
     width: fit-content
+  
+    &.red
+      color: $red300
+      background-color: $red600
+
+    &.orange
+      color: $orange300
+      background-color: $orange600
+
+    &.amber
+      color: $amber300
+      background-color: $amber600
+
+    &.yellow
+      color: $yellow300
+      background-color: $yellow600
+
+    &.lime
+      color: $lime300
+      background-color: $lime600
+
+    &.green
+      color: $green300
+      background-color: $green600
+
+    &.emerald
+      color: $emerald300
+      background-color: $emerald600
+
+    &.teal
+      color: $teal300
+      background-color: $teal600
+
+    &.cyan
+      color: $cyan300
+      background-color: $cyan600
+
+    &.sky
+      color: $sky300
+      background-color: $sky600
+
+    &.blue
+      color: $blue300
+      background-color: $blue600
+
+    &.indigo
+      color: $indigo300
+      background-color: $indigo600
+
+    &.violet
+      color: $violet300
+      background-color: $violet600
+
+    &.purple
+      color: $purple300
+      background-color: $purple600
+
+    &.fuchsia
+      color: $fuchsia300
+      background-color: $fuchsia600
+
+    &.pink
+      color: $pink300
+      background-color: $pink600
+
+    &.rose
+      color: $rose300
+      background-color: $rose600
 
 .controllers
   display: flex
@@ -54,11 +157,12 @@
   button
     background-color: transparent
     transition: all .2s ease-in-out
+    width: fit-content
+    height: fit-content
+    padding: .75rem
 
     svg
       cursor: pointer
-      padding: 0
-      padding: .15rem .15rem
       width: 1.5rem
       height: 1.5rem
 
@@ -106,3 +210,18 @@
 
         &:hover
           background-color: $slate600
+
+        &.exposed
+          background-color: $slate600
+
+.skeleton-loading
+  width: 100%
+  height: 100%
+  position: absolute
+  top: 0
+  left: 0
+  background-color: $slate800
+  display: flex
+  justify-content: center
+  align-items: center
+

@@ -1,56 +1,62 @@
-import { User } from '@phosphor-icons/react';
-import { CredentialList } from './CredentialList';
-import { SearchCredentials } from './SearchCredentials';
-import './styles.sass';
+import { Plus } from '@phosphor-icons/react';
 import { useState } from 'react';
+import { useData } from '../../hooks/useData';
 import type { Credential } from '../../types/Credential';
 import { CredentialDetails } from './CredentialItem/CredentialDetails';
+import { CredentialList } from './CredentialList';
+import './styles.sass';
+import { CreateCredentialModal } from '../Modals/CreateCredentialModal';
 
 export function ContentWrapper() {
-  const credentials = [
-    {
-      id: '1',
-      name: 'Netflix',
-      website: 'www.test.com',
-      login: 'johndoe@gmail.com',
-      password: 'password',
-    },
-    {
-      id: '2',
-      name: 'Steam',
-      website: 'www.test2.com',
-      login: 'johndoe@gmail.com',
-      password: 'password',
-    },
-  ];
+  const [isCreateCredentialModalOpen, setIsCreateCredentialModalOpen] =
+    useState(false);
 
-  const [selectedCredential, setSelectedCredential] =
-    useState<Credential | null>(null);
+  const {
+    credentials,
+    selectedVault,
+    selectedCredential,
+    selectCredential,
+    readCredential,
+  } = useData();
 
-  const handleCredentialSelect = (credential: Credential) => {
-    if (selectedCredential && selectedCredential.id === credential.id)
-      setSelectedCredential(null);
-    setSelectedCredential(credential);
+  const openCreateCredentialModal = () => setIsCreateCredentialModalOpen(true);
+  const closeCreateCredentialModal = () =>
+    setIsCreateCredentialModalOpen(false);
+
+  const handleCredentialSelect = async (credential: Credential) => {
+    const exposedCredential = await readCredential(credential.id);
+
+    selectCredential(exposedCredential);
   };
 
   return (
     <>
+      <CreateCredentialModal
+        isOpen={isCreateCredentialModalOpen}
+        onClose={closeCreateCredentialModal}
+      />
       <div className="outer-wrapper">
-        <header className="content-header">
-          <SearchCredentials />
-          <button>
-            <User size={22} />
-          </button>
-        </header>
+        <div className="content-header">
+          {selectedVault ? (
+            <>
+              <button
+                onClick={openCreateCredentialModal}
+                className="add-credential-button">
+                New Credential
+                <Plus size={22} weight="bold" />
+              </button>
+              {/* <SearchCredentials /> */}
+            </>
+          ) : null}
+        </div>
         <div className="bottom-wrapper">
-          <CredentialList
-            credentials={credentials}
-            selectedCredential={selectedCredential}
-            onSelectCredential={handleCredentialSelect}
-          />
-          {selectedCredential && (
-            <CredentialDetails credential={selectedCredential} />
+          {credentials && (
+            <CredentialList
+              selectedCredential={selectedCredential}
+              onSelectCredential={handleCredentialSelect}
+            />
           )}
+          {selectedCredential && <CredentialDetails />}
         </div>
       </div>
     </>

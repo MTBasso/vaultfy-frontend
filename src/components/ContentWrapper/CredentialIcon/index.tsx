@@ -1,41 +1,58 @@
-import { useEffect, useState } from 'react';
-import { imageService } from '../../../services/image.service';
+import { forwardRef, memo, useEffect, useState } from 'react';
+import { imageService } from '../../../services/image.api';
 import './styles.sass';
 
 interface CredentialIconProps {
   name: string;
+  onLoad(): void;
 }
 
-export function CredentialIcon({ name }: CredentialIconProps) {
-  const [svg, setSvg] = useState<string>('');
+export const CredentialIcon = memo(
+  (props: CredentialIconProps) => {
+    const { name, onLoad } = props;
+    const [loading, setLoading] = useState(true);
+    const [svg, setSvg] = useState<string>('');
 
-  useEffect(() => {
-    const fetchIcon = async () => {
-      try {
-        const svgData = await imageService.fetchSVG(name);
-        setSvg(svgData.data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    fetchIcon();
-  }, [name]);
+    useEffect(() => {
+      setLoading(true);
+      const fetchIcon = async () => {
+        setSvg('');
+        try {
+          const svgData = await imageService.fetchSVG(name);
+          setSvg(svgData.data);
+          if (onLoad) onLoad();
+        } catch (error) {
+          console.error(error);
+        } finally {
+          setLoading(false);
+        }
+      };
+      fetchIcon();
+    }, [name, onLoad]);
 
-  const base64Regex = /data:image\/jpeg;base64,[^"]+/;
-  const base64Match = svg.match(base64Regex);
-  const base64String = base64Match ? base64Match[0] : '';
+    const base64Regex = /data:image\/jpeg;base64,[^"]+/;
+    const base64Match = svg.match(base64Regex);
+    const base64String = base64Match ? base64Match[0] : '';
 
-  console.log(base64String);
-
-  return (
-    <div className="credential-icon">
-      {base64String && (
-        <img
-          src={base64String}
-          alt="Extracted SVG"
-          style={{ width: '100%', height: '100%' }}
-        />
-      )}
-    </div>
-  );
-}
+    return (
+      <div className="credential-icon">
+        {loading ? (
+          <div className="skeleton-loading">
+            <div className="skeleton-rectangle" />
+          </div>
+        ) : (
+          base64String && (
+            <img
+              src={base64String}
+              alt="Extracted SVG"
+              style={{ width: '100%', height: '100%' }}
+            />
+          )
+        )}
+      </div>
+    );
+  },
+  (prevProps, nextProps) => {
+    return prevProps.name === nextProps.name;
+  },
+);

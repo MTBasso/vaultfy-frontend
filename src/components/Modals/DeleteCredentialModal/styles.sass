@@ -1,0 +1,61 @@
+@import '../../../styles/colors'
+
+.modal-overlay 
+  position: fixed
+  top: 0
+  left: 0
+  right: 0
+  bottom: 0
+  background: rgba(0, 0, 0, 0.45)
+  display: flex
+  justify-content: center
+  align-items: center
+
+.modal-content 
+  background: $slate900
+  padding: 2rem
+  border-radius: 16px
+  position: relative
+  display: flex
+  flex-direction: column
+  width: 400px
+  gap: 1rem
+
+.confirmation-prompt
+  font-size: 1.2rem
+  color: $slate50
+
+.modal-header
+  display: flex
+  width: 100%
+  justify-content: space-between
+  align-items: center
+  
+  .modal-close 
+    cursor: pointer
+    color: $slate200
+
+  h2
+    margin: 0
+    color: $slate50
+    
+  button
+    align-items: center
+    justify-content: center
+    width: fit-content
+    height: fit-content
+    padding: 0
+
+    svg
+      color: $slate200
+
+.buttons
+  display: flex
+  gap: .5rem
+
+  .delete-button
+    background-color: $red600
+
+.error-message 
+  color: red
+  margin-top: 10px
