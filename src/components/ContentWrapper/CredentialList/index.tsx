@@ -12,7 +12,7 @@ export function CredentialList({
   selectedCredential,
   onSelectCredential,
 }: CredentialListProps) {
-  const { credentials } = useData()
+  const { credentials } = useData();
 
   return (
     <>
