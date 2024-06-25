@@ -1,7 +1,7 @@
 import { DotsThree } from '@phosphor-icons/react';
 import type { Vault } from '../../../types/Vault';
 import './styles.sass';
-import { useState } from 'react';
+import { type MouseEvent, useState } from 'react';
 import { ModifyVaultModal } from '../../Modals/ModifyVaultModal';
 
 interface VaultItemProps {
@@ -13,7 +13,8 @@ interface VaultItemProps {
 export function VaultItem({ vault, isSelected, onSelect }: VaultItemProps) {
   const [isModifyVaultModalOpen, setModifyVaultModalOpen] = useState(false);
 
-  const openModifyVaultModal = () => {
+  const openModifyVaultModal = (event: MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation();
     setModifyVaultModalOpen(true);
   };
   const closeModifyVaultModal = () => setModifyVaultModalOpen(false);

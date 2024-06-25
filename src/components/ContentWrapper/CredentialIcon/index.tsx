@@ -1,5 +1,5 @@
 import { memo, useEffect, useState } from 'react';
-import { imageService } from '../../../services/image.api';
+import { imageService } from '../../../services/image.service';
 import './styles.sass';
 
 interface CredentialIconProps {
@@ -24,7 +24,7 @@ export const CredentialIcon = memo(
           setSvg(svgData);
           if (onLoad) onLoad();
         } catch (error) {
-          console.error(error);
+          console.error('icon error: ', error);
         } finally {
           setLoading(false);
         }
@@ -45,11 +45,7 @@ export const CredentialIcon = memo(
           </div>
         ) : (
           base64String && (
-            <img
-              src={base64String}
-              alt="Extracted SVG"
-              style={{ width: '100%', height: '100%' }}
-            />
+            <img src={base64String} alt="Extracted SVG" style={{ width: '100%', height: '100%' }} />
           )
         )}
       </div>

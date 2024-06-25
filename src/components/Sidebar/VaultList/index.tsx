@@ -38,7 +38,7 @@ export function VaultList({ vaults }: VaultListProps) {
           {vaults.length > 0 ? (
             vaults.map((vault) => (
               <VaultItem
-                key={vault.id}
+                key={vault.name}
                 vault={vault}
                 isSelected={vault === selectedVault}
                 onSelect={() => handleVaultSelect(vault)}

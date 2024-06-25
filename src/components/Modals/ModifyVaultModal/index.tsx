@@ -10,13 +10,14 @@ interface ModifyVaultModalProps {
   onClose(): void;
 }
 
-interface EditVaultServiceProps {
-  name?: string;
-  color?: string;
-}
-
 export function ModifyVaultModal({ isOpen, onClose }: ModifyVaultModalProps) {
-  const { selectedVault, selectVault, refreshContext } = useData();
+  const {
+    updateVault,
+    removeVault,
+    selectedVault,
+    selectVault,
+    refreshContext,
+  } = useData();
 
   const [name, setName] = useState('');
   const [color, setColor] = useState('');
@@ -37,15 +38,13 @@ export function ModifyVaultModal({ isOpen, onClose }: ModifyVaultModalProps) {
       if (!selectedVault)
         throw new BadRequestError("There's no selected vault");
 
-      const data: EditVaultServiceProps = {};
-
-      if (selectedVault.name === name) data.name = name;
-      if (selectedVault.color === color) data.color = color;
+      const updatedVault = { ...selectedVault, name, color };
 
       await vaultService.editVault(selectedVault.id, name, color);
 
       refreshContext();
       onClose();
+      updateVault(updatedVault);
     } catch (error) {
       if (isCustomError(error)) setError(error.message);
       setError('Edit vault failed.');
@@ -54,11 +53,17 @@ export function ModifyVaultModal({ isOpen, onClose }: ModifyVaultModalProps) {
 
   const handleDeleteVault = async () => {
     setError(null);
+
     try {
-      await vaultService.deleteVault(selectedVault!.id);
+      if (!selectedVault)
+        throw new BadRequestError("There's no selected vault");
+
+      await vaultService.deleteVault(selectedVault.id);
       selectVault(null);
+
       refreshContext();
       onClose();
+      removeVault(selectedVault.id);
     } catch (error) {
       console.error('Delete vault failed: ', error);
       setError('Delete vault failed.');

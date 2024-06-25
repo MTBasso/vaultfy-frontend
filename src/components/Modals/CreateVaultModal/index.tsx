@@ -23,10 +23,10 @@ export function CreateVaultModal({ isOpen, onClose }: CreateVaultModalProps) {
     try {
       await vaultService.createVault(name, color);
 
+      refreshContext();
       onClose();
       setName('');
       setColor('');
-      refreshContext();
     } catch (error) {
       if (isCustomError(error)) setError(error.message);
       setError('Create vault failed.');

@@ -3,38 +3,50 @@ import { useData } from '../../../../hooks/useData';
 import { CredentialIcon } from '../../CredentialIcon';
 import './styles.sass';
 import { useEffect, useState } from 'react';
+import type { Credential } from '../../../../types/Credential';
 import { DeleteCredentialModal } from '../../../Modals/DeleteCredentialModal';
 import { EditCredentialModal } from '../../../Modals/EditCredentialModal';
 
 export function CredentialDetails() {
-  const { selectedCredential, selectedVault } = useData();
+  const {
+    selectedCredential,
+    selectCredential,
+    readCredential,
+    selectedVault,
+  } = useData();
 
   const [exposedPassword, setExposedPassword] = useState(false);
+  const [iconLoaded, setIconLoaded] = useState(false);
+  const [prevSelectedCredential, setPrevSelectedCredential] =
+    useState<Credential | null>(null);
   const [isEditCredentialModalOpen, setEditCredentialModalOpen] =
     useState(false);
   const [isDeleteCredentialModalOpen, setDeleteCredentialModalOpen] =
     useState(false);
-  const [iconLoaded, setIconLoaded] = useState(false);
-  const [prevSelectedCredential, setPrevSelectedCredential] =
-    useState(selectedCredential);
 
-  const openEditCredentialModal = () => {
-    setEditCredentialModalOpen(true);
-  };
+  const openEditCredentialModal = () => setEditCredentialModalOpen(true);
   const closeEditCredentialModal = () => setEditCredentialModalOpen(false);
 
-  const openDeleteCredentialModal = () => {
-    setDeleteCredentialModalOpen(true);
-  };
+  const openDeleteCredentialModal = () => setDeleteCredentialModalOpen(true);
   const closeDeleteCredentialModal = () => setDeleteCredentialModalOpen(false);
 
+  async function getExposedCredential(selectedCredential: Credential) {
+    selectCredential(await readCredential(selectedCredential!.id));
+  }
+
   useEffect(() => {
-    if (
-      !selectedCredential ||
-      selectedCredential.id !== prevSelectedCredential?.id
-    )
-      setIconLoaded(false);
-    setPrevSelectedCredential(selectedCredential);
+    const fetchData = async () => {
+      if (
+        !selectedCredential ||
+        selectedCredential.id !== prevSelectedCredential?.id
+      )
+        setIconLoaded(false);
+      if (selectedCredential) await getExposedCredential(selectedCredential);
+      setPrevSelectedCredential(selectedCredential);
+      setIconLoaded(true);
+    };
+
+    fetchData();
   }, [selectedCredential]);
 
   const handleIconLoad = () => {
@@ -63,7 +75,6 @@ export function CredentialDetails() {
           <header className="credential-header">
             <div className="info">
               <CredentialIcon
-                key={selectedCredential.name}
                 name={selectedCredential.name}
                 onLoad={handleIconLoad}
               />
@@ -96,7 +107,7 @@ export function CredentialDetails() {
               <div className="text">
                 <span>Password</span>
                 {exposedPassword ? (
-                  <p>{selectedCredential.password}</p>
+                  <p>{selectedCredential.decryptedPassword}</p>
                 ) : (
                   <p>•••••••••••</p>
                 )}

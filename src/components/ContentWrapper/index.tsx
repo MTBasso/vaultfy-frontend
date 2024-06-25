@@ -24,8 +24,8 @@ export function ContentWrapper() {
     setIsCreateCredentialModalOpen(false);
 
   const handleCredentialSelect = async (credential: Credential) => {
-    const exposedCredential = await readCredential(credential.id);
-    selectCredential(exposedCredential);
+    selectCredential(credential);
+    await readCredential(credential.id);
   };
 
   return (

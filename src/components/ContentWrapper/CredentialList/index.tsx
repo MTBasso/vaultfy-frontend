@@ -8,10 +8,7 @@ interface CredentialListProps {
   onSelectCredential(credential: Credential): void;
 }
 
-export function CredentialList({
-  selectedCredential,
-  onSelectCredential,
-}: CredentialListProps) {
+export function CredentialList({ selectedCredential, onSelectCredential }: CredentialListProps) {
   const { credentials } = useData();
 
   return (
@@ -20,7 +17,7 @@ export function CredentialList({
         {credentials ? (
           credentials.map((credential) => (
             <CredentialItem
-              key={credential.id}
+              key={credential.name}
               credential={credential}
               isSelected={selectedCredential?.id === credential.id}
               onSelect={() => onSelectCredential(credential)}

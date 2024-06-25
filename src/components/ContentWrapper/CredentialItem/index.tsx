@@ -7,11 +7,7 @@ interface CredentialItemProps {
   onSelect(): void;
 }
 
-export function CredentialItem({
-  credential,
-  isSelected,
-  onSelect,
-}: CredentialItemProps) {
+export function CredentialItem({ credential, isSelected, onSelect }: CredentialItemProps) {
   return (
     <div className="wrapper2">
       <div onClick={onSelect} className="credential-item-wrapper">
