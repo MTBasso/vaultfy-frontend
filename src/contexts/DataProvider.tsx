@@ -1,9 +1,8 @@
 import { type ReactNode, createContext, useEffect, useState } from 'react';
-import {
-  credentialService,
-  userService,
-  vaultService,
-} from '../services/server.api';
+
+import { credentialService } from '../services/credential.service';
+import { userService } from '../services/user.service';
+import { vaultService } from '../services/vault.service';
 import type { Credential } from '../types/Credential';
 import type { User } from '../types/User';
 import type { Vault } from '../types/Vault';
@@ -16,8 +15,11 @@ interface DataContextType {
   selectedCredential: Credential | null;
 
   logout(): void;
+  addVault(vault: Vault): void;
   fetchVaults(): void;
   selectVault(vault: Vault | null): void;
+  updateVault(updatedVault: Vault): void;
+  removeVault(vaultId: string): void;
   fetchCredentials(vaultId: string): void;
   selectCredential(credential: Credential | null): void;
   readCredential(credentialId: string): Promise<Credential>;
@@ -41,8 +43,7 @@ export const DataContextProvider = ({ children }: DataContextProviderProps) => {
 
   useEffect(() => {
     const initialData = async () => {
-      const user = await fetchUser();
-      setUser(user);
+      if (!user) setUser(await fetchUser());
       fetchVaults();
     };
     initialData();
@@ -62,6 +63,10 @@ export const DataContextProvider = ({ children }: DataContextProviderProps) => {
     setSelectedCredential(null);
   }
 
+  function addVault(vault: Vault) {
+    setVaults((prevVaults) => [...prevVaults!, vault]);
+  }
+
   async function fetchVaults() {
     const vaults = await vaultService.listUserVaults();
     setVaults(vaults);
@@ -69,6 +74,22 @@ export const DataContextProvider = ({ children }: DataContextProviderProps) => {
 
   function selectVault(vault: Vault | null) {
     setSelectedVault(vault);
+    setCredentials(null);
+    if (selectedCredential?.vaultId !== vault?.id) selectCredential(null);
+  }
+
+  function updateVault(updatedVault: Vault) {
+    setVaults((prevVaults) =>
+      prevVaults!.map((vault) =>
+        vault.id === updatedVault.id ? updatedVault : vault,
+      ),
+    );
+  }
+
+  function removeVault(vaultId: string) {
+    setVaults((prevVaults) =>
+      prevVaults!.filter((vault) => vault.id !== vaultId),
+    );
   }
 
   async function fetchCredentials(vaultId: string) {
@@ -76,33 +97,34 @@ export const DataContextProvider = ({ children }: DataContextProviderProps) => {
     setCredentials(credentials);
   }
 
-  function selectCredential(credential: Credential | null) {
+  const selectCredential = (credential: Credential | null) => {
     setSelectedCredential(credential);
-  }
+  };
 
   async function readCredential(credentialId: string): Promise<Credential> {
     const credential = await credentialService.readCredential(credentialId);
     return credential;
   }
 
-  function refreshContext() {
-    setRefresh((state) => !state);
-  }
+  const refreshContext = () => setRefresh((state) => !state);
 
   return (
     <DataContext.Provider
       value={{
         user,
-        vaults,
-        selectedVault,
-        credentials,
-        selectedCredential,
         logout,
+        vaults,
+        addVault,
         fetchVaults,
+        selectedVault,
         selectVault,
+        updateVault,
+        removeVault,
+        credentials,
         fetchCredentials,
-        selectCredential,
         readCredential,
+        selectedCredential,
+        selectCredential,
         refreshContext,
       }}>
       {children}

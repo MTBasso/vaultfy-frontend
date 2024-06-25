@@ -4,14 +4,17 @@
     "enabled": true
   },
   "files": {
-    "ignore": ["dist/**", "coverage/**"]
+    "ignore": [
+      "dist/**",
+      "coverage/**"
+    ]
   },
   "formatter": {
     "enabled": true,
     "indentStyle": "space",
     "indentWidth": 2,
     "lineEnding": "lf",
-    "lineWidth": 80
+    "lineWidth": 120
   },
   "javascript": {
     "formatter": {
