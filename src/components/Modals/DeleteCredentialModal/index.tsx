@@ -2,6 +2,7 @@ import { X } from '@phosphor-icons/react';
 import { type FormEvent, useState } from 'react';
 import { credentialService } from '../../../services/server.api';
 import './styles.sass';
+import { BadRequestError, isCustomError } from '../../../errors';
 import { useData } from '../../../hooks/useData';
 
 interface DeleteCredentialModalProps {
@@ -25,17 +26,21 @@ export function DeleteCredentialModal({
   const handleDeleteCredential = async (event: FormEvent) => {
     event.preventDefault();
     setError(null);
+
     try {
-      const response = await credentialService.deleteCredential(
-        selectedCredential!.id,
-      );
-      console.log('Delete Credential: ', response.data);
+      if (!selectedCredential)
+        throw new BadRequestError("There's no selected credential");
+      if (!selectedVault)
+        throw new BadRequestError("There's no selected vault");
+
+      await credentialService.deleteCredential(selectedCredential.id);
+
       refreshContext();
-      fetchCredentials(selectedVault!.id);
+      fetchCredentials(selectedVault.id);
       selectCredential(null);
       onClose();
     } catch (error) {
-      console.error('Delete Credential failed: ', error);
+      if (isCustomError(error)) setError(error.message);
       setError('Delete Credential failed.');
     }
   };

@@ -2,6 +2,7 @@ import { X } from '@phosphor-icons/react';
 import { type FormEvent, useState } from 'react';
 import { credentialService } from '../../../services/server.api';
 import './styles.sass';
+import { BadRequestError, isCustomError } from '../../../errors';
 import { useData } from '../../../hooks/useData';
 
 interface CreateCredentialModalProps {
@@ -13,34 +14,38 @@ export function CreateCredentialModal({
   isOpen,
   onClose,
 }: CreateCredentialModalProps) {
+  const { selectedVault, refreshContext, fetchCredentials } = useData();
+
   const [name, setName] = useState('');
   const [website, setWebsite] = useState('');
   const [login, setLogin] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
-  const { selectedVault, refreshContext, fetchCredentials } = useData();
 
   const handleCreateCredential = async (event: FormEvent) => {
     event.preventDefault();
     setError(null);
+
     try {
-      const response = await credentialService.createCredential(
-        selectedVault!.id,
+      if (!selectedVault)
+        throw new BadRequestError("There's no selected vault");
+      await credentialService.createCredential(
+        selectedVault.id,
         name,
         website,
         login,
         password,
       );
-      console.log('Create Credential: ', response.data);
+
       onClose();
       setName('');
       setWebsite('');
       setLogin('');
       setPassword('');
       refreshContext();
-      fetchCredentials(selectedVault!.id);
+      fetchCredentials(selectedVault.id);
     } catch (error) {
-      console.error('Create Credential failed: ', error);
+      if (isCustomError(error)) setError(error.message);
       setError('Create Credential failed.');
     }
   };

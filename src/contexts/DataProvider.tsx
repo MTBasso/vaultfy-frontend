@@ -43,16 +43,13 @@ export const DataContextProvider = ({ children }: DataContextProviderProps) => {
     const initialData = async () => {
       const user = await fetchUser();
       setUser(user);
-      fetchVaults(user.id);
+      fetchVaults();
     };
     initialData();
   }, [refresh]);
 
   async function fetchUser() {
-    const userId = localStorage.getItem('userId');
-    if (!userId) throw new Error('No user id');
-    const response = await userService.readUser(userId);
-    return response.data.user;
+    return await userService.readUser();
   }
 
   function logout() {
@@ -65,11 +62,9 @@ export const DataContextProvider = ({ children }: DataContextProviderProps) => {
     setSelectedCredential(null);
   }
 
-  async function fetchVaults(inputId?: string) {
-    const userId = localStorage.getItem('userId') || inputId;
-    if (!userId) throw new Error('No user id');
-    const response = await vaultService.listUserVaults(userId);
-    setVaults(response.data.vaults);
+  async function fetchVaults() {
+    const vaults = await vaultService.listUserVaults();
+    setVaults(vaults);
   }
 
   function selectVault(vault: Vault | null) {
@@ -77,9 +72,8 @@ export const DataContextProvider = ({ children }: DataContextProviderProps) => {
   }
 
   async function fetchCredentials(vaultId: string) {
-    const response = await credentialService.listVaultCredentials(vaultId);
-    console.log(response);
-    setCredentials(response.data.credentials);
+    const credentials = await credentialService.listVaultCredentials(vaultId);
+    setCredentials(credentials);
   }
 
   function selectCredential(credential: Credential | null) {
@@ -87,8 +81,8 @@ export const DataContextProvider = ({ children }: DataContextProviderProps) => {
   }
 
   async function readCredential(credentialId: string): Promise<Credential> {
-    const response = await credentialService.readCredential(credentialId);
-    return response.data.Credential;
+    const credential = await credentialService.readCredential(credentialId);
+    return credential;
   }
 
   function refreshContext() {

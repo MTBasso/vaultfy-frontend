@@ -8,9 +8,6 @@ import './styles.sass';
 import { CreateCredentialModal } from '../Modals/CreateCredentialModal';
 
 export function ContentWrapper() {
-  const [isCreateCredentialModalOpen, setIsCreateCredentialModalOpen] =
-    useState(false);
-
   const {
     credentials,
     selectedVault,
@@ -19,13 +16,15 @@ export function ContentWrapper() {
     readCredential,
   } = useData();
 
+  const [isCreateCredentialModalOpen, setIsCreateCredentialModalOpen] =
+    useState(false);
+
   const openCreateCredentialModal = () => setIsCreateCredentialModalOpen(true);
   const closeCreateCredentialModal = () =>
     setIsCreateCredentialModalOpen(false);
 
   const handleCredentialSelect = async (credential: Credential) => {
     const exposedCredential = await readCredential(credential.id);
-
     selectCredential(exposedCredential);
   };
 

@@ -2,6 +2,7 @@ import { X } from '@phosphor-icons/react';
 import { type FormEvent, useState } from 'react';
 import { userService } from '../../../services/server.api';
 import './styles.sass';
+import { isCustomError } from '../../../errors';
 import { useData } from '../../../hooks/useData';
 
 interface LoginModalProps {
@@ -15,21 +16,23 @@ export function LoginModal({
   onClose,
   handleOpenRegisterModal,
 }: LoginModalProps) {
+  const { refreshContext } = useData();
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
-  const { refreshContext } = useData();
 
   const handleLogin = async (event: FormEvent) => {
     event.preventDefault();
     setError(null);
+
     try {
-      const response = await userService.loginUser(email, password);
-      console.log('Login: ', response.data);
+      await userService.loginUser(email, password);
+
       onClose();
       refreshContext();
     } catch (error) {
-      console.error('Login failed: ', error);
+      if (isCustomError(error)) setError(error.message);
       setError('Login Failed. Please check your credentials.');
     }
   };

@@ -2,6 +2,7 @@ import { X } from '@phosphor-icons/react';
 import { type FormEvent, useEffect, useState } from 'react';
 import { credentialService } from '../../../services/server.api';
 import './styles.sass';
+import { BadRequestError, isCustomError } from '../../../errors';
 import { useData } from '../../../hooks/useData';
 
 interface EditCredentialModalProps {
@@ -48,26 +49,31 @@ export function EditCredentialModal({
     setError(null);
     const data: EditCredentialServiceProps = {};
 
-    if (selectedCredential!.name !== name) data.name = name;
-    if (selectedCredential!.website !== website) data.website = website;
-    if (selectedCredential!.login !== login) data.login = login;
-    if (selectedCredential!.password !== password) data.password = password;
-
     try {
-      const response = await credentialService.editCredential(
-        selectedCredential!.id,
+      if (!selectedVault)
+        throw new BadRequestError("There's no selected vault");
+      if (!selectedCredential)
+        throw new BadRequestError("There's no selected credential");
+
+      if (selectedCredential.name !== name) data.name = name;
+      if (selectedCredential.website !== website) data.website = website;
+      if (selectedCredential.login !== login) data.login = login;
+      if (selectedCredential.password !== password) data.password = password;
+
+      await credentialService.editCredential(
+        selectedCredential.id,
         data.name,
         data.website,
         data.login,
         data.password,
       );
-      console.log('Edit Credential: ', response.data);
+
       refreshContext();
-      fetchCredentials(selectedVault!.id);
+      fetchCredentials(selectedVault.id);
       selectCredential(null);
       onClose();
     } catch (error) {
-      console.error('Edit Credential failed: ', error);
+      if (isCustomError(error)) setError(error.message);
       setError('Edit Credential failed.');
     }
   };

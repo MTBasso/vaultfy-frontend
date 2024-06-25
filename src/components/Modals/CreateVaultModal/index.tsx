@@ -2,6 +2,7 @@ import { X } from '@phosphor-icons/react';
 import { type FormEvent, useState } from 'react';
 import { vaultService } from '../../../services/server.api';
 import './styles.sass';
+import { isCustomError } from '../../../errors';
 import { useData } from '../../../hooks/useData';
 
 interface CreateVaultModalProps {
@@ -18,15 +19,16 @@ export function CreateVaultModal({ isOpen, onClose }: CreateVaultModalProps) {
   const handleCreateVault = async (event: FormEvent) => {
     event.preventDefault();
     setError(null);
+
     try {
-      const response = await vaultService.createVault(name, color);
-      console.log('Create Vault: ', response.data);
+      await vaultService.createVault(name, color);
+
       onClose();
       setName('');
       setColor('');
       refreshContext();
     } catch (error) {
-      console.error('Create vault failed: ', error);
+      if (isCustomError(error)) setError(error.message);
       setError('Create vault failed.');
     }
   };

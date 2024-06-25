@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { InternalServerError } from '../errors';
 
 const imageApi = axios.create({
   baseURL: 'https://appstore-app-icon-fetch.onrender.com/',
@@ -6,11 +7,9 @@ const imageApi = axios.create({
 
 export const imageService = {
   fetchSVG: async (searchTerm: string) => {
-    console.log('fetch image called');
-
     const response = await imageApi.post('image-to-svg', { term: searchTerm });
-    console.log(response.data);
-
-    return response;
+    if (response.data.error)
+      throw new InternalServerError('Failed to fetch credential icon');
+    return response.data;
   },
 };

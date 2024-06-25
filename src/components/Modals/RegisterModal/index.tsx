@@ -2,6 +2,7 @@ import { X } from '@phosphor-icons/react';
 import { type FormEvent, useState } from 'react';
 import { userService } from '../../../services/server.api';
 import './styles.sass';
+import { isCustomError } from '../../../errors';
 import { useData } from '../../../hooks/useData';
 
 interface RegisterModalProps {
@@ -15,27 +16,25 @@ export function RegisterModal({
   onClose,
   handleOpenLoginModal,
 }: RegisterModalProps) {
+  const { refreshContext } = useData();
+
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
-  const { refreshContext } = useData();
 
   const handleRegister = async (event: FormEvent) => {
     event.preventDefault();
     setError(null);
+
     try {
-      const response = await userService.registerUser(
-        username,
-        email,
-        password,
-      );
-      console.log('Register: ', response.data);
+      await userService.registerUser(username, email, password);
+
       onClose();
       refreshContext();
     } catch (error) {
-      console.error('Registration failed: ', error);
-      setError('Registration Failed. Please try again later.');
+      if (isCustomError(error)) setError(error.message);
+      setError('Unhandled server error');
     }
   };
 

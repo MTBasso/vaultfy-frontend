@@ -12,6 +12,7 @@ interface VaultItemProps {
 
 export function VaultItem({ vault, isSelected, onSelect }: VaultItemProps) {
   const [isModifyVaultModalOpen, setModifyVaultModalOpen] = useState(false);
+
   const openModifyVaultModal = () => {
     setModifyVaultModalOpen(true);
   };

@@ -2,6 +2,7 @@ import { X } from '@phosphor-icons/react';
 import { type FormEvent, useEffect, useState } from 'react';
 import { vaultService } from '../../../services/server.api';
 import './styles.sass';
+import { BadRequestError, isCustomError } from '../../../errors';
 import { useData } from '../../../hooks/useData';
 
 interface ModifyVaultModalProps {
@@ -31,23 +32,22 @@ export function ModifyVaultModal({ isOpen, onClose }: ModifyVaultModalProps) {
   const handleEditVault = async (event: FormEvent) => {
     event.preventDefault();
     setError(null);
-    const data: EditVaultServiceProps = {};
-
-    if (selectedVault!.name === name) data.name = name;
-    if (selectedVault!.color === color) data.color = color;
 
     try {
-      const response = await vaultService.editVault(
-        selectedVault!.id,
-        name,
-        color,
-      );
-      console.log('Edit Vault: ', response.data);
-      // selectVault(null);
+      if (!selectedVault)
+        throw new BadRequestError("There's no selected vault");
+
+      const data: EditVaultServiceProps = {};
+
+      if (selectedVault.name === name) data.name = name;
+      if (selectedVault.color === color) data.color = color;
+
+      await vaultService.editVault(selectedVault.id, name, color);
+
       refreshContext();
       onClose();
     } catch (error) {
-      console.error('Edit vault failed: ', error);
+      if (isCustomError(error)) setError(error.message);
       setError('Edit vault failed.');
     }
   };
@@ -55,8 +55,7 @@ export function ModifyVaultModal({ isOpen, onClose }: ModifyVaultModalProps) {
   const handleDeleteVault = async () => {
     setError(null);
     try {
-      const response = await vaultService.deleteVault(selectedVault!.id);
-      console.log('Delete vault: ', response.data);
+      await vaultService.deleteVault(selectedVault!.id);
       selectVault(null);
       refreshContext();
       onClose();

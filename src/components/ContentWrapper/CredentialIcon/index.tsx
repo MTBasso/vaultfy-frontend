@@ -1,4 +1,4 @@
-import { forwardRef, memo, useEffect, useState } from 'react';
+import { memo, useEffect, useState } from 'react';
 import { imageService } from '../../../services/image.api';
 import './styles.sass';
 
@@ -15,11 +15,13 @@ export const CredentialIcon = memo(
 
     useEffect(() => {
       setLoading(true);
+
       const fetchIcon = async () => {
         setSvg('');
+
         try {
           const svgData = await imageService.fetchSVG(name);
-          setSvg(svgData.data);
+          setSvg(svgData);
           if (onLoad) onLoad();
         } catch (error) {
           console.error(error);
@@ -27,6 +29,7 @@ export const CredentialIcon = memo(
           setLoading(false);
         }
       };
+
       fetchIcon();
     }, [name, onLoad]);
 
