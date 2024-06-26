@@ -1,9 +1,9 @@
 import { X } from '@phosphor-icons/react';
 import { type FormEvent, useEffect, useState } from 'react';
-import { vaultService } from '../../../services/server.api';
 import './styles.sass';
 import { BadRequestError, isCustomError } from '../../../errors';
 import { useData } from '../../../hooks/useData';
+import { vaultService } from '../../../services/vault.service';
 
 interface ModifyVaultModalProps {
   isOpen: boolean;
@@ -11,13 +11,7 @@ interface ModifyVaultModalProps {
 }
 
 export function ModifyVaultModal({ isOpen, onClose }: ModifyVaultModalProps) {
-  const {
-    updateVault,
-    removeVault,
-    selectedVault,
-    selectVault,
-    refreshContext,
-  } = useData();
+  const { updateVault, removeVault, selectedVault, selectVault, refreshContext } = useData();
 
   const [name, setName] = useState('');
   const [color, setColor] = useState('');
@@ -35,8 +29,7 @@ export function ModifyVaultModal({ isOpen, onClose }: ModifyVaultModalProps) {
     setError(null);
 
     try {
-      if (!selectedVault)
-        throw new BadRequestError("There's no selected vault");
+      if (!selectedVault) throw new BadRequestError("There's no selected vault");
 
       const updatedVault = { ...selectedVault, name, color };
 
@@ -55,8 +48,7 @@ export function ModifyVaultModal({ isOpen, onClose }: ModifyVaultModalProps) {
     setError(null);
 
     try {
-      if (!selectedVault)
-        throw new BadRequestError("There's no selected vault");
+      if (!selectedVault) throw new BadRequestError("There's no selected vault");
 
       await vaultService.deleteVault(selectedVault.id);
       selectVault(null);
@@ -97,12 +89,7 @@ export function ModifyVaultModal({ isOpen, onClose }: ModifyVaultModalProps) {
       <div className="modal-content">
         <div className="modal-header">
           <h2>Edit Vault</h2>
-          <X
-            className="modal-close"
-            size={22}
-            weight="bold"
-            onClick={onClose}
-          />
+          <X className="modal-close" size={22} weight="bold" onClick={onClose} />
         </div>
         <form onSubmit={handleEditVault}>
           <div>
@@ -131,10 +118,7 @@ export function ModifyVaultModal({ isOpen, onClose }: ModifyVaultModalProps) {
                     onChange={(e) => setColor(e.target.value)}
                     required
                   />
-                  <span
-                    className="color-swatch"
-                    style={{ backgroundColor: colorOption.hex }}
-                  />
+                  <span className="color-swatch" style={{ backgroundColor: colorOption.hex }} />
                 </label>
               ))}
             </div>

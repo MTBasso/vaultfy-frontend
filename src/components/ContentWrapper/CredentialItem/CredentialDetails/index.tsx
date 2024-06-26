@@ -8,21 +8,13 @@ import { DeleteCredentialModal } from '../../../Modals/DeleteCredentialModal';
 import { EditCredentialModal } from '../../../Modals/EditCredentialModal';
 
 export function CredentialDetails() {
-  const {
-    selectedCredential,
-    selectCredential,
-    readCredential,
-    selectedVault,
-  } = useData();
+  const { selectedCredential, selectCredential, readCredential, selectedVault } = useData();
 
   const [exposedPassword, setExposedPassword] = useState(false);
   const [iconLoaded, setIconLoaded] = useState(false);
-  const [prevSelectedCredential, setPrevSelectedCredential] =
-    useState<Credential | null>(null);
-  const [isEditCredentialModalOpen, setEditCredentialModalOpen] =
-    useState(false);
-  const [isDeleteCredentialModalOpen, setDeleteCredentialModalOpen] =
-    useState(false);
+  const [prevSelectedCredential, setPrevSelectedCredential] = useState<Credential | null>(null);
+  const [isEditCredentialModalOpen, setEditCredentialModalOpen] = useState(false);
+  const [isDeleteCredentialModalOpen, setDeleteCredentialModalOpen] = useState(false);
 
   const openEditCredentialModal = () => setEditCredentialModalOpen(true);
   const closeEditCredentialModal = () => setEditCredentialModalOpen(false);
@@ -36,18 +28,14 @@ export function CredentialDetails() {
 
   useEffect(() => {
     const fetchData = async () => {
-      if (
-        !selectedCredential ||
-        selectedCredential.id !== prevSelectedCredential?.id
-      )
-        setIconLoaded(false);
+      if (!selectedCredential || selectedCredential.id !== prevSelectedCredential?.id) setIconLoaded(false);
       if (selectedCredential) await getExposedCredential(selectedCredential);
       setPrevSelectedCredential(selectedCredential);
       setIconLoaded(true);
     };
 
     fetchData();
-  }, [selectedCredential]);
+  }, []);
 
   const handleIconLoad = () => {
     setIconLoaded(true);
@@ -61,28 +49,16 @@ export function CredentialDetails() {
 
   return (
     <>
-      <DeleteCredentialModal
-        isOpen={isDeleteCredentialModalOpen}
-        onClose={closeDeleteCredentialModal}
-      />
-      <EditCredentialModal
-        isOpen={isEditCredentialModalOpen}
-        onClose={closeEditCredentialModal}
-      />
-      <div
-        className={`credential-details-wrapper ${iconLoaded ? 'loaded' : 'loading'}`}>
+      <DeleteCredentialModal isOpen={isDeleteCredentialModalOpen} onClose={closeDeleteCredentialModal} />
+      <EditCredentialModal isOpen={isEditCredentialModalOpen} onClose={closeEditCredentialModal} />
+      <div className={`credential-details-wrapper ${iconLoaded ? 'loaded' : 'loading'}`}>
         <div className="loaded-details">
           <header className="credential-header">
             <div className="info">
-              <CredentialIcon
-                name={selectedCredential.name}
-                onLoad={handleIconLoad}
-              />
+              <CredentialIcon name={selectedCredential.name} onLoad={handleIconLoad} />
               <div className="name-and-vault">
                 <h4>{selectedCredential.name}</h4>
-                <span className={`${selectedVault?.color}`}>
-                  {selectedVault?.name}
-                </span>
+                <span className={`${selectedVault?.color}`}>{selectedVault?.name}</span>
               </div>
             </div>
             <div className="controllers">
@@ -106,16 +82,10 @@ export function CredentialDetails() {
             <div className="password">
               <div className="text">
                 <span>Password</span>
-                {exposedPassword ? (
-                  <p>{selectedCredential.decryptedPassword}</p>
-                ) : (
-                  <p>•••••••••••</p>
-                )}
+                {exposedPassword ? <p>{selectedCredential.decryptedPassword}</p> : <p>•••••••••••</p>}
               </div>
               <div className="buttons">
-                <button
-                  className={`${exposedPassword && 'exposed'}`}
-                  onClick={handleExposePassword}>
+                <button className={`${exposedPassword && 'exposed'}`} onClick={handleExposePassword}>
                   <Eye size={22} />
                 </button>
                 <button>

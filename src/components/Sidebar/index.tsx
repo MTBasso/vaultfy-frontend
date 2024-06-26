@@ -36,16 +36,8 @@ export function Sidebar() {
 
   return (
     <>
-      <LoginModal
-        isOpen={isLoginModalOpen}
-        onClose={closeLoginModal}
-        handleOpenRegisterModal={openRegisterModal}
-      />
-      <RegisterModal
-        isOpen={isRegisterModalOpen}
-        onClose={closeRegisterModal}
-        handleOpenLoginModal={openLoginModal}
-      />
+      <LoginModal isOpen={isLoginModalOpen} onClose={closeLoginModal} handleOpenRegisterModal={openRegisterModal} />
+      <RegisterModal isOpen={isRegisterModalOpen} onClose={closeRegisterModal} handleOpenLoginModal={openLoginModal} />
       <div className="wrapper">
         <div className="top-half">
           <div className="logo-user">
@@ -62,9 +54,7 @@ export function Sidebar() {
           </div>
         </div>
         <div className="bottom-half">
-          <div className="vault-list">
-            {vaults && <VaultList vaults={vaults} />}
-          </div>
+          <div className="vault-list">{vaults && <VaultList vaults={vaults} />}</div>
         </div>
       </div>
     </>

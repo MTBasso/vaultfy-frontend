@@ -1,9 +1,9 @@
 import { X } from '@phosphor-icons/react';
 import { type FormEvent, useState } from 'react';
-import { userService } from '../../../services/server.api';
 import './styles.sass';
 import { isCustomError } from '../../../errors';
 import { useData } from '../../../hooks/useData';
+import { userService } from '../../../services/user.service';
 
 interface RegisterModalProps {
   isOpen: boolean;
@@ -11,11 +11,7 @@ interface RegisterModalProps {
   handleOpenLoginModal(): void;
 }
 
-export function RegisterModal({
-  isOpen,
-  onClose,
-  handleOpenLoginModal,
-}: RegisterModalProps) {
+export function RegisterModal({ isOpen, onClose, handleOpenLoginModal }: RegisterModalProps) {
   const { refreshContext } = useData();
 
   const [username, setUsername] = useState('');
@@ -45,12 +41,7 @@ export function RegisterModal({
       <div className="modal-content">
         <div className="modal-header">
           <h2>Register</h2>
-          <X
-            className="modal-close"
-            size={22}
-            weight="bold"
-            onClick={onClose}
-          />
+          <X className="modal-close" size={22} weight="bold" onClick={onClose} />
         </div>
         <form onSubmit={handleRegister}>
           <div>

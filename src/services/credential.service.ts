@@ -5,8 +5,7 @@ import { serverApi } from './apiConfig';
 export const credentialService = {
   listVaultCredentials: async (vaultId: string): Promise<Credential[]> => {
     const response = await serverApi.get(`credential/list/${vaultId}`);
-    if (response.data.error)
-      throw new InternalServerError('Failed to fetch vault credential list ');
+    if (response.data.error) throw new InternalServerError('Failed to fetch vault credential list ');
 
     return response.data.credentials;
   },
@@ -16,13 +15,7 @@ export const credentialService = {
 
     return response.data.credential;
   },
-  createCredential: async (
-    vaultId: string,
-    name: string,
-    website: string,
-    login: string,
-    password: string,
-  ) => {
+  createCredential: async (vaultId: string, name: string, website: string, login: string, password: string) => {
     const response = await serverApi.post(`credential/register`, {
       vaultId,
       name,
@@ -32,15 +25,8 @@ export const credentialService = {
     });
     if (response.data.error) throw new InternalServerError('Failed to create credential');
   },
-  editCredential: async (
-    credentialId: string,
-    name?: string,
-    website?: string,
-    login?: string,
-    password?: string,
-  ) => {
-    if (!name && !website && !login && !password)
-      throw new BadRequestError('At least one field is required');
+  editCredential: async (credentialId: string, name?: string, website?: string, login?: string, password?: string) => {
+    if (!name && !website && !login && !password) throw new BadRequestError('At least one field is required');
 
     const response = await serverApi.patch(`credential/update/${credentialId}`, {
       name,

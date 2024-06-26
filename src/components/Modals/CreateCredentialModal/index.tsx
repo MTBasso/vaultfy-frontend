@@ -1,19 +1,16 @@
 import { X } from '@phosphor-icons/react';
 import { type FormEvent, useState } from 'react';
-import { credentialService } from '../../../services/server.api';
 import './styles.sass';
 import { BadRequestError, isCustomError } from '../../../errors';
 import { useData } from '../../../hooks/useData';
+import { credentialService } from '../../../services/credential.service';
 
 interface CreateCredentialModalProps {
   isOpen: boolean;
   onClose(): void;
 }
 
-export function CreateCredentialModal({
-  isOpen,
-  onClose,
-}: CreateCredentialModalProps) {
+export function CreateCredentialModal({ isOpen, onClose }: CreateCredentialModalProps) {
   const { selectedVault, refreshContext, fetchCredentials } = useData();
 
   const [name, setName] = useState('');
@@ -27,15 +24,8 @@ export function CreateCredentialModal({
     setError(null);
 
     try {
-      if (!selectedVault)
-        throw new BadRequestError("There's no selected vault");
-      await credentialService.createCredential(
-        selectedVault.id,
-        name,
-        website,
-        login,
-        password,
-      );
+      if (!selectedVault) throw new BadRequestError("There's no selected vault");
+      await credentialService.createCredential(selectedVault.id, name, website, login, password);
 
       onClose();
       setName('');
@@ -57,12 +47,7 @@ export function CreateCredentialModal({
       <div className="modal-content">
         <div className="modal-header">
           <h2>Create Credential</h2>
-          <X
-            className="modal-close"
-            size={22}
-            weight="bold"
-            onClick={onClose}
-          />
+          <X className="modal-close" size={22} weight="bold" onClick={onClose} />
         </div>
         <form onSubmit={handleCreateCredential}>
           <div>

@@ -1,9 +1,5 @@
 import axios from 'axios';
-import {
-  BadRequestError,
-  InternalServerError,
-  UnauthorizedError,
-} from '../errors';
+import { BadRequestError, InternalServerError, UnauthorizedError } from '../errors';
 
 export const serverApi = axios.create({
   baseURL: import.meta.env.VITE_SERVER_API_BASE_URL,
@@ -26,29 +22,19 @@ serverApi.interceptors.response.use(
 
       switch (status) {
         case 400:
-          return Promise.reject(
-            new BadRequestError(data.message || 'Bad Request'),
-          );
+          return Promise.reject(new BadRequestError(data.message || 'Bad Request'));
         case 401:
-          return Promise.reject(
-            new UnauthorizedError(data.message || 'Unauthorized'),
-          );
+          return Promise.reject(new UnauthorizedError(data.message || 'Unauthorized'));
         case 500:
-          return Promise.reject(
-            new InternalServerError(data.message || 'Internal Server Error'),
-          );
+          return Promise.reject(new InternalServerError(data.message || 'Internal Server Error'));
         default:
           return Promise.reject(new Error(data.message || 'An error occurred'));
       }
     }
     if (error.request) {
-      return Promise.reject(
-        new Error('No response from server. Please try again later.'),
-      );
+      return Promise.reject(new Error('No response from server. Please try again later.'));
     }
-    return Promise.reject(
-      new Error(`Error in setting up request: ${error.message}`),
-    );
+    return Promise.reject(new Error(`Error in setting up request: ${error.message}`));
   },
 );
 
@@ -69,20 +55,14 @@ imageApi.interceptors.response.use(
         case 404:
           return Promise.reject(new Error('Not Found'));
         case 500:
-          return Promise.reject(
-            new InternalServerError('Internal Server Error'),
-          );
+          return Promise.reject(new InternalServerError('Internal Server Error'));
         default:
           return Promise.reject(new Error(data.message || 'An error occurred'));
       }
     }
     if (error.request) {
-      return Promise.reject(
-        new Error('No response from server. Please try again later.'),
-      );
+      return Promise.reject(new Error('No response from server. Please try again later.'));
     }
-    return Promise.reject(
-      new Error(`Error in setting up request: ${error.message}`),
-    );
+    return Promise.reject(new Error(`Error in setting up request: ${error.message}`));
   },
 );

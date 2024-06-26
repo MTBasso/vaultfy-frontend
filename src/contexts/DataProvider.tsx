@@ -37,8 +37,7 @@ export const DataContextProvider = ({ children }: DataContextProviderProps) => {
   const [vaults, setVaults] = useState<Vault[] | null>(null);
   const [selectedVault, setSelectedVault] = useState<Vault | null>(null);
   const [credentials, setCredentials] = useState<Credential[] | null>(null);
-  const [selectedCredential, setSelectedCredential] =
-    useState<Credential | null>(null);
+  const [selectedCredential, setSelectedCredential] = useState<Credential | null>(null);
   const [refresh, setRefresh] = useState(false);
 
   useEffect(() => {
@@ -73,23 +72,19 @@ export const DataContextProvider = ({ children }: DataContextProviderProps) => {
   }
 
   function selectVault(vault: Vault | null) {
+    setSelectedCredential(null);
+
     setSelectedVault(vault);
     setCredentials(null);
     if (selectedCredential?.vaultId !== vault?.id) selectCredential(null);
   }
 
   function updateVault(updatedVault: Vault) {
-    setVaults((prevVaults) =>
-      prevVaults!.map((vault) =>
-        vault.id === updatedVault.id ? updatedVault : vault,
-      ),
-    );
+    setVaults((prevVaults) => prevVaults!.map((vault) => (vault.id === updatedVault.id ? updatedVault : vault)));
   }
 
   function removeVault(vaultId: string) {
-    setVaults((prevVaults) =>
-      prevVaults!.filter((vault) => vault.id !== vaultId),
-    );
+    setVaults((prevVaults) => prevVaults!.filter((vault) => vault.id !== vaultId));
   }
 
   async function fetchCredentials(vaultId: string) {

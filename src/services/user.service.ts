@@ -3,11 +3,7 @@ import type { User } from '../types/User';
 import { serverApi } from './apiConfig';
 
 export const userService = {
-  registerUser: async (
-    username: string,
-    email: string,
-    password: string,
-  ): Promise<{ token: string; user: User }> => {
+  registerUser: async (username: string, email: string, password: string): Promise<{ token: string; user: User }> => {
     const response = await serverApi.post('user/register', {
       username,
       email,
@@ -24,10 +20,7 @@ export const userService = {
 
     return response.data;
   },
-  loginUser: async (
-    email: string,
-    password: string,
-  ): Promise<{ token: string; userId: string }> => {
+  loginUser: async (email: string, password: string): Promise<{ token: string; userId: string }> => {
     const response = await serverApi.post('user/login', { email, password });
     if (response.data.error) throw new InternalServerError('Failed to log in user');
 

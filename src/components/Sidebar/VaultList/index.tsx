@@ -26,10 +26,7 @@ export function VaultList({ vaults }: VaultListProps) {
 
   return (
     <div className="vault-list-container">
-      <CreateVaultModal
-        isOpen={isCreateVaultModalOpen}
-        onClose={closeCreateVaultModal}
-      />
+      <CreateVaultModal isOpen={isCreateVaultModalOpen} onClose={closeCreateVaultModal} />
       <div className="vault-list-title">
         <h4>Vaults</h4>
       </div>

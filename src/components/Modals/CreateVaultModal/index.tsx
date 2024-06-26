@@ -1,9 +1,9 @@
 import { X } from '@phosphor-icons/react';
 import { type FormEvent, useState } from 'react';
-import { vaultService } from '../../../services/server.api';
 import './styles.sass';
 import { isCustomError } from '../../../errors';
 import { useData } from '../../../hooks/useData';
+import { vaultService } from '../../../services/vault.service';
 
 interface CreateVaultModalProps {
   isOpen: boolean;
@@ -60,12 +60,7 @@ export function CreateVaultModal({ isOpen, onClose }: CreateVaultModalProps) {
       <div className="modal-content">
         <div className="modal-header">
           <h2>Create Vault</h2>
-          <X
-            className="modal-close"
-            size={22}
-            weight="bold"
-            onClick={onClose}
-          />
+          <X className="modal-close" size={22} weight="bold" onClick={onClose} />
         </div>
         <form onSubmit={handleCreateVault}>
           <div>
@@ -94,10 +89,7 @@ export function CreateVaultModal({ isOpen, onClose }: CreateVaultModalProps) {
                     onChange={(e) => setColor(e.target.value)}
                     required
                   />
-                  <span
-                    className="color-swatch"
-                    style={{ backgroundColor: colorOption.hex }}
-                  />
+                  <span className="color-swatch" style={{ backgroundColor: colorOption.hex }} />
                 </label>
               ))}
             </div>

@@ -1,9 +1,9 @@
 import { X } from '@phosphor-icons/react';
 import { type FormEvent, useEffect, useState } from 'react';
-import { credentialService } from '../../../services/server.api';
 import './styles.sass';
 import { BadRequestError, isCustomError } from '../../../errors';
 import { useData } from '../../../hooks/useData';
+import { credentialService } from '../../../services/credential.service';
 
 interface EditCredentialModalProps {
   isOpen: boolean;
@@ -17,17 +17,8 @@ interface EditCredentialServiceProps {
   password?: string;
 }
 
-export function EditCredentialModal({
-  isOpen,
-  onClose,
-}: EditCredentialModalProps) {
-  const {
-    selectedVault,
-    selectedCredential,
-    selectCredential,
-    refreshContext,
-    fetchCredentials,
-  } = useData();
+export function EditCredentialModal({ isOpen, onClose }: EditCredentialModalProps) {
+  const { selectedVault, selectedCredential, selectCredential, refreshContext, fetchCredentials } = useData();
 
   const [name, setName] = useState('');
   const [website, setWebsite] = useState('');
@@ -40,7 +31,7 @@ export function EditCredentialModal({
       setName(selectedCredential.name);
       setWebsite(selectedCredential.website);
       setLogin(selectedCredential.login);
-      setPassword(selectedCredential.password);
+      setPassword(selectedCredential.decryptedPassword);
     }
   }, [selectedCredential]);
 
@@ -50,23 +41,15 @@ export function EditCredentialModal({
     const data: EditCredentialServiceProps = {};
 
     try {
-      if (!selectedVault)
-        throw new BadRequestError("There's no selected vault");
-      if (!selectedCredential)
-        throw new BadRequestError("There's no selected credential");
+      if (!selectedVault) throw new BadRequestError("There's no selected vault");
+      if (!selectedCredential) throw new BadRequestError("There's no selected credential");
 
       if (selectedCredential.name !== name) data.name = name;
       if (selectedCredential.website !== website) data.website = website;
       if (selectedCredential.login !== login) data.login = login;
-      if (selectedCredential.password !== password) data.password = password;
+      if (selectedCredential.decryptedPassword !== password) data.password = password;
 
-      await credentialService.editCredential(
-        selectedCredential.id,
-        data.name,
-        data.website,
-        data.login,
-        data.password,
-      );
+      await credentialService.editCredential(selectedCredential.id, data.name, data.website, data.login, data.password);
 
       refreshContext();
       fetchCredentials(selectedVault.id);
@@ -85,12 +68,7 @@ export function EditCredentialModal({
       <div className="modal-content">
         <div className="modal-header">
           <h2>Edit Credential</h2>
-          <X
-            className="modal-close"
-            size={22}
-            weight="bold"
-            onClick={onClose}
-          />
+          <X className="modal-close" size={22} weight="bold" onClick={onClose} />
         </div>
         <form onSubmit={handleEditCredential}>
           <div>

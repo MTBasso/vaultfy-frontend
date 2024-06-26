@@ -44,9 +44,7 @@ export const CredentialIcon = memo(
             <div className="skeleton-rectangle" />
           </div>
         ) : (
-          base64String && (
-            <img src={base64String} alt="Extracted SVG" style={{ width: '100%', height: '100%' }} />
-          )
+          base64String && <img src={base64String} alt="Extracted SVG" style={{ width: '100%', height: '100%' }} />
         )}
       </div>
     );

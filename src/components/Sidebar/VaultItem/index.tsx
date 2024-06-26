@@ -21,13 +21,8 @@ export function VaultItem({ vault, isSelected, onSelect }: VaultItemProps) {
 
   return (
     <>
-      <ModifyVaultModal
-        isOpen={isModifyVaultModalOpen}
-        onClose={closeModifyVaultModal}
-      />
-      <div
-        className={`item-container ${isSelected ? 'selected' : ''}`}
-        onClick={onSelect}>
+      <ModifyVaultModal isOpen={isModifyVaultModalOpen} onClose={closeModifyVaultModal} />
+      <div className={`item-container ${isSelected ? 'selected' : ''}`} onClick={onSelect}>
         <div className="item-content">
           <p>
             <span className={`dot ${vault.color}`}> </span>
