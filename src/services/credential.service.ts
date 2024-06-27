@@ -25,7 +25,13 @@ export const credentialService = {
     });
     if (response.data.error) throw new InternalServerError('Failed to create credential');
   },
-  editCredential: async (credentialId: string, name?: string, website?: string, login?: string, password?: string) => {
+  editCredential: async (
+    credentialId: string,
+    name?: string,
+    website?: string,
+    login?: string,
+    password?: string,
+  ): Promise<Credential> => {
     if (!name && !website && !login && !password) throw new BadRequestError('At least one field is required');
 
     const response = await serverApi.patch(`credential/update/${credentialId}`, {
@@ -34,7 +40,12 @@ export const credentialService = {
       website,
       password,
     });
-    if (response.data.error) throw new InternalServerError('Failed to update credential');
+    if (response.data.error) {
+      console.log(response.data.error);
+
+      throw new InternalServerError(`Failed to update credential: ${response.data.error}`);
+    }
+    return response.data.credential;
   },
   deleteCredential: async (credentialId: string) => {
     const response = await serverApi.delete(`credential/delete/${credentialId}`);

@@ -3,6 +3,7 @@ export interface Credential {
   name: string;
   website: string;
   login: string;
-  decryptedPassword: string;
+  decryptedPassword?: string;
+  password?: string;
   vaultId: string;
 }

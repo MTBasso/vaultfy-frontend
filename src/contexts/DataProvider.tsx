@@ -1,5 +1,6 @@
 import { type ReactNode, createContext, useEffect, useState } from 'react';
 
+import { BadRequestError } from '../errors';
 import { credentialService } from '../services/credential.service';
 import { userService } from '../services/user.service';
 import { vaultService } from '../services/vault.service';
@@ -16,12 +17,13 @@ interface DataContextType {
 
   logout(): void;
   addVault(vault: Vault): void;
-  fetchVaults(): void;
+  fetchVaults(): Promise<void>;
   selectVault(vault: Vault | null): void;
   updateVault(updatedVault: Vault): void;
   removeVault(vaultId: string): void;
-  fetchCredentials(vaultId: string): void;
-  selectCredential(credential: Credential | null): void;
+  fetchCredentials(vaultId: string): Promise<void>;
+  selectCredential(credentialId: string): Promise<void>;
+  updateCredential(credential: Partial<Credential>): Promise<Credential>;
   readCredential(credentialId: string): Promise<Credential>;
   refreshContext(): void;
 }
@@ -53,8 +55,8 @@ export const DataContextProvider = ({ children }: DataContextProviderProps) => {
   }
 
   function logout() {
-    localStorage.removeItem('authToken');
-    localStorage.removeItem('userId');
+    userService.logout();
+
     setUser(null);
     setVaults(null);
     setSelectedVault(null);
@@ -67,8 +69,7 @@ export const DataContextProvider = ({ children }: DataContextProviderProps) => {
   }
 
   async function fetchVaults() {
-    const vaults = await vaultService.listUserVaults();
-    setVaults(vaults);
+    setVaults(await vaultService.listUserVaults());
   }
 
   function selectVault(vault: Vault | null) {
@@ -76,7 +77,6 @@ export const DataContextProvider = ({ children }: DataContextProviderProps) => {
 
     setSelectedVault(vault);
     setCredentials(null);
-    if (selectedCredential?.vaultId !== vault?.id) selectCredential(null);
   }
 
   function updateVault(updatedVault: Vault) {
@@ -92,8 +92,24 @@ export const DataContextProvider = ({ children }: DataContextProviderProps) => {
     setCredentials(credentials);
   }
 
-  const selectCredential = (credential: Credential | null) => {
-    setSelectedCredential(credential);
+  const selectCredential = async (credentialId: string) => {
+    setSelectedCredential(await readCredential(credentialId));
+  };
+
+  const updateCredential = async (credential: Partial<Credential>) => {
+    if (!credential.id) throw new BadRequestError('Missing credential Id');
+    if (!credential.name && !credential.website && !credential.login && !credential.password)
+      throw new BadRequestError('At least one field is required');
+    const updatedCredential = await credentialService.editCredential(
+      credential.id,
+      credential.name,
+      credential.website,
+      credential.login,
+      credential.password,
+    );
+    fetchCredentials(updatedCredential.vaultId);
+    selectCredential(updatedCredential.id);
+    return updatedCredential;
   };
 
   async function readCredential(credentialId: string): Promise<Credential> {
@@ -117,6 +133,7 @@ export const DataContextProvider = ({ children }: DataContextProviderProps) => {
         removeVault,
         credentials,
         fetchCredentials,
+        updateCredential,
         readCredential,
         selectedCredential,
         selectCredential,

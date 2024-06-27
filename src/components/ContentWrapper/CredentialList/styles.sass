@@ -1,6 +1,27 @@
-.credential-list-container
+@import '../../../styles/colors'
+  
+
+.credential-list-wrapper
+  display: flex
+  height: 1px
+
+  flex-grow: 1
+  overflow-y: scroll
+
+.credential-list
   display: flex
   flex-direction: column
   gap: .75rem
   width: 100%
-  height: 100%
+  padding-right: .5rem
+  
+
+.credential-list-wrapper::-webkit-scrollbar
+  width: .25rem
+
+.credential-list-wrapper::-webkit-scrollbar-track
+  background: transparent
+
+.credential-list-wrapper::-webkit-scrollbar-thumb
+  background-color: $slate700
+  border-radius: 100px

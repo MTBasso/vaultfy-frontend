@@ -1,4 +1,4 @@
-import { InternalServerError } from '../errors';
+import { InternalServerError, UnauthorizedError } from '../errors';
 import type { User } from '../types/User';
 import { serverApi } from './apiConfig';
 
@@ -35,10 +35,17 @@ export const userService = {
   },
   readUser: async (): Promise<User> => {
     const userId = serverApi.defaults.headers.common.UserId || localStorage.getItem('userId');
+    if (!userId) throw new UnauthorizedError('Failed to get userId');
 
     const response = await serverApi.get(`user/read/${userId}`);
     if (response.data.error) throw new InternalServerError('Failed to read user');
 
     return response.data.user;
+  },
+  logout: () => {
+    serverApi.defaults.headers.common.Authorization = '';
+    serverApi.defaults.headers.common.UserId = '';
+    localStorage.removeItem('authToken');
+    localStorage.removeItem('userId');
   },
 };

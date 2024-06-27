@@ -5,7 +5,6 @@ import { serverApi } from './apiConfig';
 export const vaultService = {
   listUserVaults: async (): Promise<Vault[]> => {
     const userId = serverApi.defaults.headers.common.UserId || localStorage.getItem('userId');
-
     if (userId === undefined) throw new UnauthorizedError('Missing userId in request');
 
     const response = await serverApi.get(`vault/list/${userId}`);

@@ -3,7 +3,6 @@ import { type FormEvent, useEffect, useState } from 'react';
 import './styles.sass';
 import { BadRequestError, isCustomError } from '../../../errors';
 import { useData } from '../../../hooks/useData';
-import { credentialService } from '../../../services/credential.service';
 
 interface EditCredentialModalProps {
   isOpen: boolean;
@@ -11,6 +10,7 @@ interface EditCredentialModalProps {
 }
 
 interface EditCredentialServiceProps {
+  id: string;
   name?: string;
   website?: string;
   login?: string;
@@ -18,7 +18,7 @@ interface EditCredentialServiceProps {
 }
 
 export function EditCredentialModal({ isOpen, onClose }: EditCredentialModalProps) {
-  const { selectedVault, selectedCredential, selectCredential, refreshContext, fetchCredentials } = useData();
+  const { selectedVault, selectedCredential, updateCredential, refreshContext } = useData();
 
   const [name, setName] = useState('');
   const [website, setWebsite] = useState('');
@@ -31,33 +31,36 @@ export function EditCredentialModal({ isOpen, onClose }: EditCredentialModalProp
       setName(selectedCredential.name);
       setWebsite(selectedCredential.website);
       setLogin(selectedCredential.login);
-      setPassword(selectedCredential.decryptedPassword);
+      setPassword(selectedCredential.decryptedPassword!);
     }
   }, [selectedCredential]);
 
   const handleEditCredential = async (event: FormEvent) => {
     event.preventDefault();
     setError(null);
-    const data: EditCredentialServiceProps = {};
 
     try {
       if (!selectedVault) throw new BadRequestError("There's no selected vault");
       if (!selectedCredential) throw new BadRequestError("There's no selected credential");
+
+      const data: EditCredentialServiceProps = {
+        id: selectedCredential.id,
+      };
 
       if (selectedCredential.name !== name) data.name = name;
       if (selectedCredential.website !== website) data.website = website;
       if (selectedCredential.login !== login) data.login = login;
       if (selectedCredential.decryptedPassword !== password) data.password = password;
 
-      await credentialService.editCredential(selectedCredential.id, data.name, data.website, data.login, data.password);
+      console.log(data);
 
+      await updateCredential(data);
       refreshContext();
-      fetchCredentials(selectedVault.id);
-      selectCredential(null);
       onClose();
     } catch (error) {
       if (isCustomError(error)) setError(error.message);
       setError('Edit Credential failed.');
+      // console.log(error.message);
     }
   };
 

@@ -12,6 +12,7 @@ export function Sidebar() {
 
   const [isLoginModalOpen, setLoginModalOpen] = useState(false);
   const [isRegisterModalOpen, setRegisterModalOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const openLoginModal = () => {
     closeRegisterModal();
@@ -26,8 +27,15 @@ export function Sidebar() {
   const closeRegisterModal = () => setRegisterModalOpen(false);
 
   useEffect(() => {
-    fetchVaults();
-  }, []);
+    const fetchData = async () => {
+      setLoading(true);
+
+      await fetchVaults();
+      setLoading(false);
+    };
+
+    if (user) fetchData();
+  }, [user]);
 
   function handleLogout() {
     logout();
@@ -36,8 +44,14 @@ export function Sidebar() {
 
   return (
     <>
-      <LoginModal isOpen={isLoginModalOpen} onClose={closeLoginModal} handleOpenRegisterModal={openRegisterModal} />
-      <RegisterModal isOpen={isRegisterModalOpen} onClose={closeRegisterModal} handleOpenLoginModal={openLoginModal} />
+      <div className="modals">
+        <LoginModal isOpen={isLoginModalOpen} onClose={closeLoginModal} handleOpenRegisterModal={openRegisterModal} />
+        <RegisterModal
+          isOpen={isRegisterModalOpen}
+          onClose={closeRegisterModal}
+          handleOpenLoginModal={openLoginModal}
+        />
+      </div>
       <div className="wrapper">
         <div className="top-half">
           <div className="logo-user">
@@ -54,7 +68,15 @@ export function Sidebar() {
           </div>
         </div>
         <div className="bottom-half">
-          <div className="vault-list">{vaults && <VaultList vaults={vaults} />}</div>
+          {loading && user ? (
+            <div className="skeleton">
+              <h4>Vaults</h4>
+              <div className="skeleton-item" />
+              <div className="skeleton-item" />
+            </div>
+          ) : (
+            <div className="vault-list">{vaults && <VaultList vaults={vaults} />}</div>
+          )}
         </div>
       </div>
     </>

@@ -25,32 +25,36 @@ export function VaultList({ vaults }: VaultListProps) {
   };
 
   return (
-    <div className="vault-list-container">
-      <CreateVaultModal isOpen={isCreateVaultModalOpen} onClose={closeCreateVaultModal} />
-      <div className="vault-list-title">
-        <h4>Vaults</h4>
+    <>
+      <div className="modals">
+        <CreateVaultModal isOpen={isCreateVaultModalOpen} onClose={closeCreateVaultModal} />
       </div>
-      <div className="bottom-half">
-        <div className="vault-list">
-          {vaults.length > 0 ? (
-            vaults.map((vault) => (
-              <VaultItem
-                key={vault.name}
-                vault={vault}
-                isSelected={vault === selectedVault}
-                onSelect={() => handleVaultSelect(vault)}
-              />
-            ))
-          ) : (
-            <p>No vaults.</p>
-          )}
+      <div className="vault-list-container">
+        <div className="vault-list-title">
+          <h4>Vaults</h4>
         </div>
-        <div className="new-vault-button">
-          <button onClick={openCreateVaultModal}>
-            New Vault <Plus size={24} />
-          </button>
+        <div className="bottom-half">
+          <div className="vault-list">
+            {vaults.length > 0 ? (
+              vaults.map((vault) => (
+                <VaultItem
+                  key={vault.name}
+                  vault={vault}
+                  isSelected={vault === selectedVault}
+                  onSelect={() => handleVaultSelect(vault)}
+                />
+              ))
+            ) : (
+              <p>No vaults.</p>
+            )}
+          </div>
+          <div className="new-vault-button">
+            <button onClick={openCreateVaultModal}>
+              New Vault <Plus size={24} />
+            </button>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
