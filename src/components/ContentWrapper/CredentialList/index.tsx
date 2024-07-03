@@ -12,21 +12,19 @@ export function CredentialList({ selectedCredential, onSelectCredential }: Crede
   const { credentials } = useData();
 
   return (
-    <div className="credential-list-wrapper">
-      <div className="credential-list">
-        {credentials ? (
-          credentials?.map((credential) => (
-            <CredentialItem
-              key={credential.name}
-              credential={credential}
-              isSelected={selectedCredential?.id === credential.id}
-              onSelect={() => onSelectCredential(credential.id)}
-            />
-          ))
-        ) : (
-          <p>There are no credentials in this vault</p>
-        )}
-      </div>
+    <div className="credential-list">
+      {credentials ? (
+        credentials?.map((credential) => (
+          <CredentialItem
+            key={credential.name}
+            credential={credential}
+            isSelected={selectedCredential?.id === credential.id}
+            onSelect={() => onSelectCredential(credential.id)}
+          />
+        ))
+      ) : (
+        <p>There are no credentials in this vault</p>
+      )}
     </div>
   );
 }

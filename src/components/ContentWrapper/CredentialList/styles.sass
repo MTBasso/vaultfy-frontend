@@ -1,27 +1,25 @@
 @import '../../../styles/colors'
-  
-
-.credential-list-wrapper
-  display: flex
-  height: 1px
-
-  flex-grow: 1
-  overflow-y: scroll
+@import '../../../styles/media-queries'
 
 .credential-list
   display: flex
   flex-direction: column
   gap: .75rem
-  width: 100%
   padding-right: .5rem
+  flex-grow: 1
+  overflow-y: scroll
+
+  @include mobile
+    height: 100% 
+    flex-grow: 1
   
 
-.credential-list-wrapper::-webkit-scrollbar
+.credential-list::-webkit-scrollbar
   width: .25rem
 
-.credential-list-wrapper::-webkit-scrollbar-track
+.credential-list::-webkit-scrollbar-track
   background: transparent
 
-.credential-list-wrapper::-webkit-scrollbar-thumb
+.credential-list::-webkit-scrollbar-thumb
   background-color: $slate700
   border-radius: 100px

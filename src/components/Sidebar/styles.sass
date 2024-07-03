@@ -1,10 +1,11 @@
 @import '../../styles/colors'
+@import '../../styles/media-queries'
 
-.modals
+.sidebar-modals
   position: fixed
   z-index: 1000
 
-.wrapper
+.sidebar-wrapper
   display: flex
   flex-direction: column
   align-items: flex-start
@@ -15,23 +16,20 @@
   background: linear-gradient(0deg, #0f172a 0%, #334155 100%)
 
   width: 410px
-  height: calc(100vh - 3rem)
   padding: 1.5rem
-  max-height: 100vw
-  overflow-y: none 
+  overflow-y: none
 
-.top-half
-  padding-bottom: 1.5rem
-  border-bottom: 1px solid $slate600
-  width: 100%
-  display: flex
-  flex-direction: column
-  gap: 3rem
+  @include mobile
+    box-sizing: border-box
+    width: 100%
+    border: none
 
 .logo-user
+  box-sizing: border-box
   display: flex
   align-items: center
   justify-content: space-between
+  width: 100%
 
   button
     width: fit-content
@@ -89,3 +87,18 @@
     background-color: $slate600
   100%
     background-color: $slate800
+
+.vault-list-wrapper
+  width: 100%
+
+  h4
+    color: $slate50
+    font-size: 1.75rem
+    margin: 0
+
+  @include mobile
+    display: flex
+    flex-direction: column
+    box-sizing: border-box
+    width: 100%
+    gap: 1rem

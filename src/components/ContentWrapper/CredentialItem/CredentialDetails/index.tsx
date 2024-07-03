@@ -45,61 +45,59 @@ export function CredentialDetails() {
 
   return (
     <>
-      <div className="modals">
+      <div className="credential-details-modals">
         <DeleteCredentialModal isOpen={isDeleteCredentialModalOpen} onClose={closeDeleteCredentialModal} />
         <EditCredentialModal isOpen={isEditCredentialModalOpen} onClose={closeEditCredentialModal} />
       </div>
-      <div className="credential-details-wrapper">
-        {loading || !iconLoaded ? (
-          <div className="skeleton-loading">
-            <div className="skeleton-rectangle" />
-          </div>
-        ) : (
-          <div className="loaded-details">
-            <header className="credential-header">
-              <div className="info">
-                <CredentialIcon name={selectedCredential.name} onLoad={handleIconLoad} />
-                <div className="name-and-vault">
-                  <h4>{selectedCredential.name}</h4>
-                  <span className={`${selectedVault?.color}`}>{selectedVault?.name}</span>
-                </div>
+      {loading || !iconLoaded ? (
+        <div className="skeleton-loading">
+          <div className="skeleton-rectangle" />
+        </div>
+      ) : (
+        <div className="loaded-details">
+          <header className="credential-header">
+            <div className="info">
+              <CredentialIcon name={selectedCredential.name} onLoad={handleIconLoad} />
+              <div className="name-and-vault">
+                <h4>{selectedCredential.name}</h4>
+                <span className={`${selectedVault?.color}`}>{selectedVault?.name}</span>
               </div>
-              <div className="controllers">
-                <button onClick={openEditCredentialModal}>
-                  <NotePencil size={22} />
+            </div>
+            <div className="controllers">
+              <button onClick={openEditCredentialModal}>
+                <NotePencil size={22} />
+              </button>
+              <button onClick={openDeleteCredentialModal} className="delete">
+                <Trash size={22} />
+              </button>
+            </div>
+          </header>
+          <div className="credential-details">
+            <div className="website">
+              <span>Website</span>
+              <p>{selectedCredential.website}</p>
+            </div>
+            <div className="username">
+              <span>Username</span>
+              <p>{selectedCredential.login}</p>
+            </div>
+            <div className="password">
+              <div className="text">
+                <span>Password</span>
+                {exposedPassword ? <p>{selectedCredential.decryptedPassword}</p> : <p>•••••••••••</p>}
+              </div>
+              <div className="buttons">
+                <button className={`${exposedPassword && 'exposed'}`} onClick={handleExposePassword}>
+                  <Eye size={22} />
                 </button>
-                <button onClick={openDeleteCredentialModal} className="delete">
-                  <Trash size={22} />
+                <button>
+                  <Copy size={22} />
                 </button>
-              </div>
-            </header>
-            <div className="credential-details">
-              <div className="website">
-                <span>Website</span>
-                <p>{selectedCredential.website}</p>
-              </div>
-              <div className="username">
-                <span>Username</span>
-                <p>{selectedCredential.login}</p>
-              </div>
-              <div className="password">
-                <div className="text">
-                  <span>Password</span>
-                  {exposedPassword ? <p>{selectedCredential.decryptedPassword}</p> : <p>•••••••••••</p>}
-                </div>
-                <div className="buttons">
-                  <button className={`${exposedPassword && 'exposed'}`} onClick={handleExposePassword}>
-                    <Eye size={22} />
-                  </button>
-                  <button>
-                    <Copy size={22} />
-                  </button>
-                </div>
               </div>
             </div>
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </>
   );
 }

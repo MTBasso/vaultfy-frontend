@@ -1,6 +1,7 @@
 @import '../../../styles/colors'
+@import '../../../styles/media-queries'
 
-.modals
+.vault-list-modals
   position: fixed
   z-index: 1000
 
@@ -13,31 +14,33 @@
   height: 100%
   color: $slate50
 
-.vault-list-title
-  display: flex
-  flex-direction: row
-  gap: .5rem
-  align-items: center
+  @include mobile
+    box-sizing: border-box
 
-.bottom-half
+.vault-list
+  margin-top: .5rem
   display: flex
   flex-direction: column
-  width: 100%
-  gap: .5rem
   flex-grow: 1
-  justify-content: space-between
-  overflow: hidden
+  height: 560px
+  gap: .5rem
+  // width: 100%
 
-  .vault-list
-    display: flex
-    flex-direction: column
-    flex-grow: 1
-    overflow-y: auto
+  @include mobile
+    flex-grow: 0
+    max-height: 160px
+    overflow-y: scroll
+    box-sizing: border-box
+    width: auto
+    display: grid
+    gap: .5rem
+    grid-template-columns: 1fr 1fr
 
-  .new-vault-button
-    display: flex
-    width: 100%
-    height: fit-content
+.new-vault-button
+  display: flex
+  width: 100%
+  height: fit-content
+  margin-top: 1rem
 
 .vault-list::-webkit-scrollbar
   width: .25rem

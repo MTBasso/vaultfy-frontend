@@ -44,7 +44,7 @@ export function Sidebar() {
 
   return (
     <>
-      <div className="modals">
+      <div className="sidebar-modals">
         <LoginModal isOpen={isLoginModalOpen} onClose={closeLoginModal} handleOpenRegisterModal={openRegisterModal} />
         <RegisterModal
           isOpen={isRegisterModalOpen}
@@ -52,10 +52,10 @@ export function Sidebar() {
           handleOpenLoginModal={openLoginModal}
         />
       </div>
-      <div className="wrapper">
-        <div className="top-half">
-          <div className="logo-user">
-            <Logo />
+      <div className="sidebar-wrapper">
+        <div className="logo-user">
+          <Logo />
+          <div className="user-buttons">
             {!user ? (
               <button onClick={openLoginModal}>
                 <User size={22} />
@@ -67,17 +67,15 @@ export function Sidebar() {
             )}
           </div>
         </div>
-        <div className="bottom-half">
-          {loading && user ? (
-            <div className="skeleton">
-              <h4>Vaults</h4>
-              <div className="skeleton-item" />
-              <div className="skeleton-item" />
-            </div>
-          ) : (
-            <div className="vault-list">{vaults && <VaultList vaults={vaults} />}</div>
-          )}
-        </div>
+        {loading && user ? (
+          <div className="skeleton">
+            <h4>Vaults</h4>
+            <div className="skeleton-item" />
+            <div className="skeleton-item" />
+          </div>
+        ) : (
+          <div className="vault-list-wrapper">{vaults && <VaultList vaults={vaults} />}</div>
+        )}
       </div>
     </>
   );

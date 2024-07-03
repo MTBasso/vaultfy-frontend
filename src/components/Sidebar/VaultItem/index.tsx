@@ -21,13 +21,11 @@ export function VaultItem({ vault, isSelected, onSelect }: VaultItemProps) {
 
   return (
     <>
-      <ModifyVaultModal isOpen={isModifyVaultModalOpen} onClose={closeModifyVaultModal} />
-      <div className={`item-container ${isSelected ? 'selected' : ''}`} onClick={onSelect}>
+      <ModifyVaultModal isOpen={isModifyVaultModalOpen} onClose={closeModifyVaultModal} vault={vault} />
+      <div className={`item-container ${isSelected ? 'selected' : ''} ${vault.color}`} onClick={onSelect}>
         <div className="item-content">
-          <p>
-            <span className={`dot ${vault.color}`}> </span>
-            {vault.name}
-          </p>
+          <span className={`dot ${vault.color}`}> </span>
+          <p>{vault.name}</p>
           <div className="three-dots">
             <button onClick={openModifyVaultModal}>
               <DotsThree weight="bold" size={22} />

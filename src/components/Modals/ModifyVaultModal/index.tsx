@@ -4,36 +4,36 @@ import './styles.sass';
 import { BadRequestError, isCustomError } from '../../../errors';
 import { useData } from '../../../hooks/useData';
 import { vaultService } from '../../../services/vault.service';
+import type { Vault } from '../../../types/Vault';
 
 interface ModifyVaultModalProps {
   isOpen: boolean;
   onClose(): void;
+  vault: Vault;
 }
 
-export function ModifyVaultModal({ isOpen, onClose }: ModifyVaultModalProps) {
-  const { updateVault, removeVault, selectedVault, selectVault, refreshContext } = useData();
+export function ModifyVaultModal({ isOpen, onClose, vault }: ModifyVaultModalProps) {
+  const { updateVault, removeVault, selectVault, refreshContext } = useData();
 
   const [name, setName] = useState('');
   const [color, setColor] = useState('');
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (selectedVault) {
-      setName(selectedVault.name);
-      setColor(selectedVault.color);
-    }
-  }, [selectedVault]);
+    setName(vault.name);
+    setColor(vault.color);
+  }, [vault]);
 
   const handleEditVault = async (event: FormEvent) => {
     event.preventDefault();
     setError(null);
 
     try {
-      if (!selectedVault) throw new BadRequestError("There's no selected vault");
+      if (!vault) throw new BadRequestError("There's no selected vault");
 
-      const updatedVault = { ...selectedVault, name, color };
+      const updatedVault = { ...vault, name, color };
 
-      await vaultService.editVault(selectedVault.id, name, color);
+      await vaultService.editVault(vault.id, name, color);
 
       refreshContext();
       onClose();
@@ -48,14 +48,14 @@ export function ModifyVaultModal({ isOpen, onClose }: ModifyVaultModalProps) {
     setError(null);
 
     try {
-      if (!selectedVault) throw new BadRequestError("There's no selected vault");
+      if (!vault) throw new BadRequestError("There's no selected vault");
 
-      await vaultService.deleteVault(selectedVault.id);
+      await vaultService.deleteVault(vault.id);
       selectVault(null);
 
       refreshContext();
       onClose();
-      removeVault(selectedVault.id);
+      removeVault(vault.id);
     } catch (error) {
       console.error('Delete vault failed: ', error);
       setError('Delete vault failed.');

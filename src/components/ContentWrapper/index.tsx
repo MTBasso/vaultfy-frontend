@@ -7,7 +7,7 @@ import './styles.sass';
 import { CreateCredentialModal } from '../Modals/CreateCredentialModal';
 
 export function ContentWrapper() {
-  const { credentials, selectedVault, selectedCredential, selectCredential, fetchCredentials } = useData();
+  const { user, credentials, selectedVault, selectedCredential, selectCredential, fetchCredentials } = useData();
 
   const [isCreateCredentialModalOpen, setIsCreateCredentialModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -61,43 +61,48 @@ export function ContentWrapper() {
 
   return (
     <>
-      <div className="modals">
-        <CreateCredentialModal isOpen={isCreateCredentialModalOpen} onClose={closeCreateCredentialModal} />
-      </div>
-      <div className="outer-wrapper">
-        <div className="content-header">
-          {selectedVault ? (
-            <>
-              <button onClick={openCreateCredentialModal} className="add-credential-button">
-                New Credential
-                <Plus size={22} weight="bold" />
-              </button>
-              {/* <SearchCredentials /> */}
-            </>
-          ) : null}
-        </div>
-        <div className="bottom-wrapper">
-          {loading === true ? (
-            <div className="skeleton">
+      {user ? (
+        <>
+          <div className="content-modals">
+            <CreateCredentialModal isOpen={isCreateCredentialModalOpen} onClose={closeCreateCredentialModal} />
+          </div>
+          <div className="content-wrapper">
+            <div className="content-header">
               <h4>Credentials</h4>
-
-              <div className="skeleton-item" />
-              <div className="skeleton-item" />
-              <div className="skeleton-item" />
+              {selectedVault ? (
+                <>
+                  <button onClick={openCreateCredentialModal} className="add-credential-button">
+                    New Credential
+                    <Plus size={22} weight="bold" />
+                  </button>
+                  {/* <SearchCredentials /> */}
+                </>
+              ) : null}
             </div>
-          ) : (
-            <>
-              {credentials && (
-                <div className="credentials-list-wrapper">
-                  <h4>Credentials</h4>
-                  <CredentialList selectedCredential={selectedCredential} onSelectCredential={handleCredentialSelect} />
+            <div className="content">
+              {loading === true ? (
+                <div className="skeleton">
+                  <div className="skeleton-item" />
+                  <div className="skeleton-item" />
+                  <div className="skeleton-item" />
                 </div>
+              ) : (
+                <>
+                  {credentials && (
+                    <div className="credential-list-wrapper">
+                      <CredentialList
+                        selectedCredential={selectedCredential}
+                        onSelectCredential={handleCredentialSelect}
+                      />
+                    </div>
+                  )}
+                  <div className="credential-details-wrapper">{selectedCredential ? <CredentialDetails /> : null}</div>
+                </>
               )}
-              {selectedCredential && <CredentialDetails />}
-            </>
-          )}
-        </div>
-      </div>
+            </div>
+          </div>
+        </>
+      ) : null}
     </>
   );
 }
