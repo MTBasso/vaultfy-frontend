@@ -1,53 +1,51 @@
-import { Copy, Eye, NotePencil, Trash } from '@phosphor-icons/react';
-import { useData } from '../../../../hooks/useData';
-import { CredentialIcon } from '../../CredentialIcon';
+import { Copy, Eye, NotePencil, Trash, X } from '@phosphor-icons/react';
+import { useState } from 'react';
+import { useData } from '../../../hooks/useData';
 import './styles.sass';
-import { useEffect, useState } from 'react';
-import { DeleteCredentialModal } from '../../../Modals/DeleteCredentialModal';
-import { EditCredentialModal } from '../../../Modals/EditCredentialModal';
+import { CredentialIcon } from '../../ContentWrapper/CredentialIcon';
+import { DeleteCredentialModal } from '../DeleteCredentialModal';
+import { EditCredentialModal } from '../EditCredentialModal';
 
-export function CredentialDetails() {
-  const { selectedCredential, selectCredential, fetchCredentials, selectedVault } = useData();
+interface CredentialDetailsModalProps {
+  isOpen: boolean;
+  onClose(): void;
+}
 
-  const [exposedPassword, setExposedPassword] = useState(false);
+export function CredentialDetailsModal({ isOpen, onClose }: CredentialDetailsModalProps) {
+  const { selectedVault, selectedCredential, selectCredential, fetchCredentials } = useData();
+
   const [iconLoaded, setIconLoaded] = useState(false);
-  const [loading, setLoading] = useState(false);
   const [isEditCredentialModalOpen, setEditCredentialModalOpen] = useState(false);
   const [isDeleteCredentialModalOpen, setDeleteCredentialModalOpen] = useState(false);
+  const [exposedPassword, setExposedPassword] = useState(false);
 
   const openEditCredentialModal = () => setEditCredentialModalOpen(true);
   const closeEditCredentialModal = () => setEditCredentialModalOpen(false);
   const openDeleteCredentialModal = () => setDeleteCredentialModalOpen(true);
   const closeDeleteCredentialModal = () => setDeleteCredentialModalOpen(false);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      if (!selectedCredential) return;
-      setLoading(true);
-      await selectCredential(selectedCredential.id);
-
-      setLoading(false);
-      setIconLoaded(true);
-    };
-
-    fetchData();
-  }, [selectedCredential?.id, selectCredential?.name]);
-
-  const handleIconLoad = () => {
-    setIconLoaded(true);
-  };
-
-  const handleAfterDelete = async () => {
+  async function handleAfterDelete() {
     selectCredential('');
     await fetchCredentials(selectedVault!.id);
     closeDeleteCredentialModal();
-  };
+    onClose();
+  }
+
+  async function handleClose() {
+    selectCredential('');
+    onClose();
+  }
 
   function handleExposePassword() {
     setExposedPassword((state) => !state);
   }
 
-  if (selectedCredential === null) return null;
+  const handleIconLoad = () => {
+    setIconLoaded(true);
+  };
+
+  if (!isOpen) return null;
+  if (!selectedCredential) return null;
 
   return (
     <>
@@ -59,21 +57,21 @@ export function CredentialDetails() {
         />
         <EditCredentialModal isOpen={isEditCredentialModalOpen} onClose={closeEditCredentialModal} />
       </div>
-      {loading || !iconLoaded ? (
-        <div className="skeleton-loading">
-          <div className="skeleton-rectangle" />
-        </div>
-      ) : (
-        <div className="loaded-details">
-          <header className="credential-header">
-            <div className="info">
+      <div className="credential-details-modal-overlay ">
+        <div className="credential-details-modal-content">
+          <div className="modal-header">
+            <h2>Credential Details</h2>
+            <X className="modal-close" size={22} weight="bold" onClick={handleClose} />
+          </div>
+          <div className="details-modal-info">
+            <div className="icon-name-vault">
               <CredentialIcon name={selectedCredential.name} onLoad={handleIconLoad} />
               <div className="name-and-vault">
                 <h4>{selectedCredential.name}</h4>
                 <span className={`${selectedVault?.color}`}>{selectedVault?.name}</span>
               </div>
             </div>
-            <div className="controllers">
+            <div className="details-controllers">
               <button onClick={openEditCredentialModal}>
                 <NotePencil size={22} />
               </button>
@@ -81,7 +79,7 @@ export function CredentialDetails() {
                 <Trash size={22} />
               </button>
             </div>
-          </header>
+          </div>
           <div className="credential-details">
             <div className="website">
               <span>Website</span>
@@ -107,7 +105,7 @@ export function CredentialDetails() {
             </div>
           </div>
         </div>
-      )}
+      </div>
     </>
   );
 }

@@ -4,19 +4,25 @@ import { useData } from '../../hooks/useData';
 import { CredentialDetails } from './CredentialItem/CredentialDetails';
 import { CredentialList } from './CredentialList';
 import './styles.sass';
+import { useMediaQuery } from '../../hooks/useMediaQuery';
 import { CreateCredentialModal } from '../Modals/CreateCredentialModal';
+import { CredentialDetailsModal } from '../Modals/CredentialDetailsModal';
 
 export function ContentWrapper() {
   const { user, credentials, selectedVault, selectedCredential, selectCredential, fetchCredentials } = useData();
 
   const [isCreateCredentialModalOpen, setIsCreateCredentialModalOpen] = useState(false);
+  const [isCredentialDetailsModalOpen, setIsCredentialDetailsModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const openCreateCredentialModal = () => setIsCreateCredentialModalOpen(true);
   const closeCreateCredentialModal = () => setIsCreateCredentialModalOpen(false);
 
+  const openCredentialDetailsModal = () => setIsCredentialDetailsModalOpen(true);
+  const closeCredentialDetailsModal = () => setIsCredentialDetailsModalOpen(false);
+
   const handleCredentialSelect = async (credentialId: string) => {
-    await selectCredential(credentialId);
+    selectCredential(credentialId);
   };
 
   useEffect(() => {
@@ -39,6 +45,10 @@ export function ContentWrapper() {
   }, [selectedVault]);
 
   useEffect(() => {
+    if (selectedCredential) openCredentialDetailsModal();
+  }, [selectedCredential]);
+
+  useEffect(() => {
     if (!selectedCredential || !selectedCredential.id) {
       console.log('no selected credential');
       return;
@@ -58,6 +68,8 @@ export function ContentWrapper() {
 
     fetchData();
   }, []);
+
+  const isDesktop = useMediaQuery('(min-width: 768px)');
 
   return (
     <>
@@ -96,7 +108,18 @@ export function ContentWrapper() {
                       />
                     </div>
                   )}
-                  <div className="credential-details-wrapper">{selectedCredential ? <CredentialDetails /> : null}</div>
+                  <div className="credential-details-wrapper">
+                    {selectedCredential ? (
+                      isDesktop ? (
+                        <CredentialDetails />
+                      ) : (
+                        <CredentialDetailsModal
+                          isOpen={isCredentialDetailsModalOpen}
+                          onClose={closeCredentialDetailsModal}
+                        />
+                      )
+                    ) : null}
+                  </div>
                 </>
               )}
             </div>

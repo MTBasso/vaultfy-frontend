@@ -25,6 +25,7 @@ interface DataContextType {
   selectCredential(credentialId: string): Promise<void>;
   updateCredential(credential: Partial<Credential>): Promise<Credential>;
   readCredential(credentialId: string): Promise<Credential>;
+  deleteCredential(credentialId: string): Promise<void>;
   refreshContext(): void;
 }
 
@@ -93,6 +94,7 @@ export const DataContextProvider = ({ children }: DataContextProviderProps) => {
   }
 
   const selectCredential = async (credentialId: string) => {
+    if (credentialId === '') setSelectedCredential(null);
     setSelectedCredential(await readCredential(credentialId));
   };
 
@@ -117,6 +119,15 @@ export const DataContextProvider = ({ children }: DataContextProviderProps) => {
     return credential;
   }
 
+  async function deleteCredential(credentialId: string) {
+    const credentialToDelete = await readCredential(credentialId);
+    console.log('cred to delete: ', credentialToDelete);
+
+    await credentialService.deleteCredential(credentialId);
+
+    selectCredential('');
+  }
+
   const refreshContext = () => setRefresh((state) => !state);
 
   return (
@@ -135,6 +146,7 @@ export const DataContextProvider = ({ children }: DataContextProviderProps) => {
         fetchCredentials,
         updateCredential,
         readCredential,
+        deleteCredential,
         selectedCredential,
         selectCredential,
         refreshContext,

@@ -3,16 +3,16 @@ import { type FormEvent, useState } from 'react';
 import './styles.sass';
 import { BadRequestError, isCustomError } from '../../../errors';
 import { useData } from '../../../hooks/useData';
-import { credentialService } from '../../../services/credential.service';
 
 interface DeleteCredentialModalProps {
   isOpen: boolean;
   onClose(): void;
+  onAfterDelete(): void;
 }
 
-export function DeleteCredentialModal({ isOpen, onClose }: DeleteCredentialModalProps) {
+export function DeleteCredentialModal({ isOpen, onClose, onAfterDelete }: DeleteCredentialModalProps) {
   const [error, setError] = useState<string | null>(null);
-  const { selectedVault, selectedCredential, selectCredential, refreshContext, fetchCredentials } = useData();
+  const { selectedVault, selectedCredential, refreshContext, deleteCredential } = useData();
 
   const handleDeleteCredential = async (event: FormEvent) => {
     event.preventDefault();
@@ -22,12 +22,9 @@ export function DeleteCredentialModal({ isOpen, onClose }: DeleteCredentialModal
       if (!selectedCredential) throw new BadRequestError("There's no selected credential");
       if (!selectedVault) throw new BadRequestError("There's no selected vault");
 
-      await credentialService.deleteCredential(selectedCredential.id);
-
+      await deleteCredential(selectedCredential.id);
       refreshContext();
-      fetchCredentials(selectedVault.id);
-      selectCredential(null);
-      onClose();
+      onAfterDelete();
     } catch (error) {
       if (isCustomError(error)) setError(error.message);
       setError('Delete Credential failed.');

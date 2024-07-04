@@ -67,15 +67,17 @@ export function Sidebar() {
             )}
           </div>
         </div>
-        {loading && user ? (
-          <div className="skeleton">
-            <h4>Vaults</h4>
-            <div className="skeleton-item" />
-            <div className="skeleton-item" />
-          </div>
-        ) : (
-          <div className="vault-list-wrapper">{vaults && <VaultList vaults={vaults} />}</div>
-        )}
+        {user ? (
+          loading ? (
+            <div className="skeleton">
+              <h4>Vaults</h4>
+              <div className="skeleton-item" />
+              <div className="skeleton-item" />
+            </div>
+          ) : (
+            <div className="vault-list-wrapper">{vaults && <VaultList vaults={vaults} />}</div>
+          )
+        ) : null}
       </div>
     </>
   );
