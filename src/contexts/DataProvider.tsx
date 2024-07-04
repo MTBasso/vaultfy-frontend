@@ -120,11 +120,8 @@ export const DataContextProvider = ({ children }: DataContextProviderProps) => {
   }
 
   async function deleteCredential(credentialId: string) {
-    const credentialToDelete = await readCredential(credentialId);
-    console.log('cred to delete: ', credentialToDelete);
-
+    await readCredential(credentialId);
     await credentialService.deleteCredential(credentialId);
-
     selectCredential('');
   }
 

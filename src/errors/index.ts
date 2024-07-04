@@ -29,37 +29,9 @@ export class UnauthorizedError extends ApiError {
   }
 }
 
-export class ForbiddenError extends ApiError {
-  constructor(message: string) {
-    super(message, 403);
-    this.name = 'ForbiddenError';
-  }
-}
-
-export class NotFoundError extends ApiError {
-  constructor(message: string) {
-    super(message, 404);
-    this.name = 'NotFoundError';
-  }
-}
-
-export class ConflictError extends ApiError {
-  constructor(message: string) {
-    super(message, 409);
-    this.name = 'ConflictError';
-  }
-}
-
 export class InternalServerError extends ApiError {
   constructor(message = 'Internal server error.') {
     super(message, 500);
     this.name = 'InternalServerError';
-  }
-}
-
-export class UnhandledServerError extends ApiError {
-  constructor(message = 'An unhandled error occurred.') {
-    super(message, 520);
-    this.name = 'UnhandledError';
   }
 }

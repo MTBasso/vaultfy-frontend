@@ -14,7 +14,6 @@ interface CredentialDetailsModalProps {
 export function CredentialDetailsModal({ isOpen, onClose }: CredentialDetailsModalProps) {
   const { selectedVault, selectedCredential, selectCredential, fetchCredentials } = useData();
 
-  const [iconLoaded, setIconLoaded] = useState(false);
   const [isEditCredentialModalOpen, setEditCredentialModalOpen] = useState(false);
   const [isDeleteCredentialModalOpen, setDeleteCredentialModalOpen] = useState(false);
   const [exposedPassword, setExposedPassword] = useState(false);
@@ -40,9 +39,9 @@ export function CredentialDetailsModal({ isOpen, onClose }: CredentialDetailsMod
     setExposedPassword((state) => !state);
   }
 
-  const handleIconLoad = () => {
-    setIconLoaded(true);
-  };
+  function handleIconLoad() {
+    return null;
+  }
 
   if (!isOpen) return null;
   if (!selectedCredential) return null;

@@ -32,7 +32,6 @@ export function ContentWrapper() {
 
     const loadCredentials = async () => {
       try {
-        console.log('loadCredentials called');
         await fetchCredentials(selectedVault.id);
       } catch (error) {
         console.error('Failed to fetch Credentials: ', error);
@@ -49,15 +48,11 @@ export function ContentWrapper() {
   }, [selectedCredential]);
 
   useEffect(() => {
-    if (!selectedCredential || !selectedCredential.id) {
-      console.log('no selected credential');
-      return;
-    }
+    if (!selectedCredential || !selectedCredential.id) return;
 
     setLoading(true);
     const fetchData = async () => {
       try {
-        console.log('selectedCredential');
         await selectCredential(selectedCredential.id);
       } catch (error) {
         console.error('Error selecting Credential: ', error);
@@ -87,7 +82,6 @@ export function ContentWrapper() {
                     New Credential
                     <Plus size={22} weight="bold" />
                   </button>
-                  {/* <SearchCredentials /> */}
                 </>
               ) : null}
             </div>

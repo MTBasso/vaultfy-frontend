@@ -41,8 +41,6 @@ export const credentialService = {
       password,
     });
     if (response.data.error) {
-      console.log(response.data.error);
-
       throw new InternalServerError(`Failed to update credential: ${response.data.error}`);
     }
     return response.data.credential;

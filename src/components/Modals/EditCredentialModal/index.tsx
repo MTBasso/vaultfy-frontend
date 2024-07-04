@@ -52,15 +52,12 @@ export function EditCredentialModal({ isOpen, onClose }: EditCredentialModalProp
       if (selectedCredential.login !== login) data.login = login;
       if (selectedCredential.decryptedPassword !== password) data.password = password;
 
-      console.log(data);
-
       await updateCredential(data);
       refreshContext();
       onClose();
     } catch (error) {
       if (isCustomError(error)) setError(error.message);
       setError('Edit Credential failed.');
-      // console.log(error.message);
     }
   };
 
